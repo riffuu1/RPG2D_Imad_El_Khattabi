@@ -7,7 +7,7 @@ pygame.init()
 #================
 # Window
 #================
-Width, Height = 400, 300
+Width, Height = 800, 700
 screen = pygame.display.set_mode((Width, Height))
 pygame.display.set_caption("Chroniques du Kraken oublié")
 
@@ -16,7 +16,7 @@ pygame.display.set_caption("Chroniques du Kraken oublié")
 # Background
 #==================
 background_1 = pygame.image.load('Design/Backgrounds/background_1.png')
-background_1 = pygame.transform.scale(background_1, (800, 700))
+background_1 = pygame.transform.scale(background_1, (1900, 1200))
 
 current_map = background_1
 #==================
