@@ -16,8 +16,9 @@ pygame.display.set_caption("Chroniques du Kraken oublié")
 # Background
 #==================
 background_1 = pygame.image.load('Design/Backgrounds/background_1.png')
+background_1 = pygame.transform.scale(background_1, (800, 700))
 
-
+current_map = background_1
 #==================
 # Player
 #==================
@@ -40,9 +41,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+    screen.blit(current_map, (0, 0))
     player.update(keys)
 
     player.draw()
+    player.show_hp()
 
     pygame.display.flip()
     clock.tick(60)

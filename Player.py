@@ -12,6 +12,7 @@ class Player:
         self.start_x = 200
         self.start_y = 150
         self.hp = hp
+        self.max_hp = self.hp
 
         self.x = self.start_x
         self.y = self.start_y
@@ -28,8 +29,6 @@ class Player:
             "idle_right": self.load_animation(player_folder, ["player_right_0.png", "player_right_1.png"]),
             "walk_left": self.load_animation(player_folder, ["player_left_0.png", "player_left_1.png"]),
             "walk_right": self.load_animation(player_folder, ["player_right_0.png", "player_right_1.png"]),
-            "attack_left": self.load_animation(player_folder, ["player_attacks_left.png"]),
-            "attacks_right": self.load_animation(player_folder, ["player_attacks_right.png"]),
         }
         self.current_animation = self.animations["idle_right"]
 
@@ -68,7 +67,7 @@ class Player:
             in_movement = True
 
         if keys[pygame.K_DOWN]:
-            self.rect.y -= self.speed
+            self.rect.y += self.speed
             if self.last_direction == "left":
                 self.current_animation = self.animations["walk_left"]
             else:
@@ -89,4 +88,20 @@ class Player:
 
         # --- Not in movement ---
         if not in_movement:
-            self.current_animation = self.animations[f"idle_{self.frame_index}"]
+            self.current_animation = self.animations[f"idle_{self.last_direction}"]
+
+    #================
+    # HP
+    #================
+    def show_hp(self):
+        font = pygame.font.Font(None, 36)
+        hp_text = font.render(f"HP: {self.hp}", True, (255, 255, 255))
+        bar_x, bar_y = 20, 20
+        bar_width, bar_height = 200, 20
+        pygame.draw.rect(self.screen, (255, 0, 0), (bar_x, bar_y, bar_width, bar_height))
+        hp_width = int((self.hp / self.max_hp) * bar_width)
+        pygame.draw.rect(self.screen, (0, 255, 0), (bar_x, bar_y, hp_width, bar_height))
+        self.screen.blit(hp_text, (bar_x, bar_y))
+
+    def draw(self):
+        self.screen.blit(self.get_frame(), self.rect)
