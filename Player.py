@@ -33,20 +33,60 @@ class Player:
         }
         self.current_animation = self.animations["idle_right"]
 
-        #========================
-        # Animation
-        #========================
-        def load_animation(self, folder, image_names, size=(128,128)):
-            frames =[]
-            for name in image_names:
-                path = f"{folder}/{name}"
-                image = pygame.image.load(path).convert_alpha()
-                image = pygame.transform.scale(image, size)
-                frames.append(image)
-            return frames
+    #========================
+    # Animations
+    #========================
+    def load_animation(self, folder, image_names, size=(128,128)):
+        frames =[]
+        for name in image_names:
+            path = f"{folder}/{name}"
+            image = pygame.image.load(path).convert_alpha()
+            image = pygame.transform.scale(image, size)
+            frames.append(image)
+        return frames
 
-        def get_frame(self):
-            self.frame_index += self.frame_speed
-            if self.frame_index >= len(self.current_animation):
-                self.frame_index = 0
-            return self.current_animation[int(self.frame_index)]
+    def get_frame(self):
+        self.frame_index += self.frame_speed
+        if self.frame_index >= len(self.current_animation):
+            self.frame_index = 0
+        return self.current_animation[int(self.frame_index)]
+
+    #=====================
+    # Moves
+    #====================
+    def update(self, keys):
+        old_x, od_y = self.rect.x, self.rect.y
+        in_movement = False
+
+        # --- Vertical moves ---
+        if keys[pygame.K_UP]:
+            self.rect.y -= self.speed
+            if self.last_direction == "left":
+                self.current_animation = self.animations["walk_left"]
+            else:
+                self.current_animation = self.animations["walk_right"]
+            in_movement = True
+
+        if keys[pygame.K_DOWN]:
+            self.rect.y -= self.speed
+            if self.last_direction == "left":
+                self.current_animation = self.animations["walk_left"]
+            else:
+                self.current_animation = self.animations["walk_right"]
+            in_movement = True
+
+        # --- Horizontal moves ---
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            self.rect.x -= self.speed
+            self.current_animation = self.animations["walk_left"]
+            self.last_direction = "left"
+            in_movement = True
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            self.rect.x += self.speed
+            self.current_animation = self.animations["walk_right"]
+            self.last_direction = "right"
+            in_movement = True
+
+        # --- Not in movement ---
+        if not in_movement:
+            self.current_animation = self.animations[f"idle_{self.frame_index}"]
