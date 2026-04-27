@@ -1,3 +1,9 @@
+# Author : El Khattabi Imad
+# Date: 27.04.2026
+# Version : 1.0
+
+
+
 import pygame
 
 class Player:
@@ -26,3 +32,21 @@ class Player:
             "attacks_right": self.load_animation(player_folder, ["player_attacks_right.png"]),
         }
         self.current_animation = self.animations["idle_right"]
+
+        #========================
+        # Animation
+        #========================
+        def load_animation(self, folder, image_names, size=(128,128)):
+            frames =[]
+            for name in image_names:
+                path = f"{folder}/{name}"
+                image = pygame.image.load(path).convert_alpha()
+                image = pygame.transform.scale(image, size)
+                frames.append(image)
+            return frames
+
+        def get_frame(self):
+            self.frame_index += self.frame_speed
+            if self.frame_index >= len(self.current_animation):
+                self.frame_index = 0
+            return self.current_animation[int(self.frame_index)]
