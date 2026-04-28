@@ -1,3 +1,8 @@
+# Author : El Khattabi Imad
+# Date: 28.04.2026
+# Version : 1.5
+
+
 import pygame
 
 from Player import Player
@@ -51,7 +56,7 @@ while running:
             running = False
 
     screen.blit(current_map, (-camera.x, -camera.y))
-    player.update(keys,map_width, map_height)
+    player.update(keys,map_width, map_height,current_map)
     camera.update(player, Width, Height, map_width, map_height)
 
 

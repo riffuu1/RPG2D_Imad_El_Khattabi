@@ -1,4 +1,8 @@
-#=======================
+# Author : El Khattabi Imad
+# Date: 27.04.2026
+# Version : 1.0
+
+
 # With Help of Chat GPT
 #=======================
 class Camera:
