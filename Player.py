@@ -1,16 +1,17 @@
 # Author : El Khattabi Imad
 # Date: 27.04.2026
-# Version : 1.0
+# Version : 1.2
 
 
 
 import pygame
+from Collision_player import *
 
 class Player:
     def __init__(self, screen, player_folder,hp=100):
         self.screen = screen
         self.start_x = 200
-        self.start_y = 150
+        self.start_y = 350
         self.hp = hp
         self.max_hp = self.hp
 
@@ -18,6 +19,8 @@ class Player:
         self.y = self.start_y
         self.speed = 2
         self.rect = pygame.Rect(self.x, self.y, 20, 20)
+        self.hitbox = pygame.Rect(self.rect.x + 40, self.rect.y + 70, 48, 50)
+        self.feet = pygame.Rect(self.x + 54, self.y + 118, 20, 10)
 
         self.frame_index = 0
         self.frame_speed = 0.05
@@ -50,11 +53,34 @@ class Player:
             self.frame_index = 0
         return self.current_animation[int(self.frame_index)]
 
+
+    #====================
+    # Collisions
+    #====================
+    def collision(self, surface):
+        # --- test some points of the hitbox ---
+        points = [
+            self.hitbox.topleft,
+            self.hitbox.topright,
+            self.hitbox.bottomleft,
+            self.hitbox.bottomright,
+            self.hitbox.midleft,
+            self.hitbox.midright,
+            self.hitbox.midtop,
+            self.hitbox.midbottom
+        ]
+
+        for px, py in points:
+            if check_collision_with_color(surface, px, py):
+                return True
+
+        return False
+
     #=====================
     # Moves
     #====================
-    def update(self, keys,map_width, map_height):
-        old_x, od_y = self.rect.x, self.rect.y
+    def update(self, keys,map_width, map_height,surface):
+        old_x, old_y = self.rect.x, self.rect.y
         in_movement = False
 
         # --- Vertical moves ---
@@ -74,6 +100,14 @@ class Player:
                 self.current_animation = self.animations["walk_right"]
             in_movement = True
 
+        # --- Update Hitbox ---
+        self.hitbox.y = self.rect.y + 70
+
+        # --- Vertical Collision ---
+        if self.collision(surface):
+            self.rect.y = old_y
+            self.hitbox.y = old_y + 70
+
         # --- Horizontal moves ---
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.rect.x -= self.speed
@@ -86,11 +120,18 @@ class Player:
             self.last_direction = "right"
             in_movement = True
 
+        self.hitbox.x = self.rect.x + 40
+
+        # --- Horizontal Collision ---
+        if self.collision(surface):
+            self.rect.x = old_x
+            self.hitbox.x = old_x + 40
+
         # --- Not in movement ---
         if not in_movement:
             self.current_animation = self.animations[f"idle_{self.last_direction}"]
 
-        # limites de la map
+        # --- Border of the map ---
         self.rect.x = max(0, min(self.rect.x, map_width - self.rect.width))
         self.rect.y = max(0, min(self.rect.y, map_height - self.rect.height))
 
