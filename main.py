@@ -1,6 +1,7 @@
 import pygame
 
 from Player import Player
+from Camera import Camera
 
 pygame.init()
 
@@ -17,6 +18,8 @@ pygame.display.set_caption("Chroniques du Kraken oublié")
 #==================
 background_1 = pygame.image.load('Design/Backgrounds/background_1.png')
 background_1 = pygame.transform.scale(background_1, (1900, 1200))
+map_width = background_1.get_width()
+map_height = background_1.get_height()
 
 current_map = background_1
 #==================
@@ -24,6 +27,12 @@ current_map = background_1
 #==================
 folder_player = "./Design/Player/Moves"
 player = Player(screen, folder_player)
+
+
+#=================
+# Camera
+#=================
+camera = Camera()
 
 
 #==================
@@ -41,11 +50,19 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.blit(current_map, (0, 0))
-    player.update(keys)
+    screen.blit(current_map, (-camera.x, -camera.y))
+    player.update(keys,map_width, map_height)
+    camera.update(player, Width, Height, map_width, map_height)
 
-    player.draw()
+
+
+
+
+    player.draw(screen, camera)
     player.show_hp()
+
+    pygame.display.flip()
+
 
     pygame.display.flip()
     clock.tick(60)

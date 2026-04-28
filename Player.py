@@ -53,7 +53,7 @@ class Player:
     #=====================
     # Moves
     #====================
-    def update(self, keys):
+    def update(self, keys,map_width, map_height):
         old_x, od_y = self.rect.x, self.rect.y
         in_movement = False
 
@@ -90,6 +90,10 @@ class Player:
         if not in_movement:
             self.current_animation = self.animations[f"idle_{self.last_direction}"]
 
+        # limites de la map
+        self.rect.x = max(0, min(self.rect.x, map_width - self.rect.width))
+        self.rect.y = max(0, min(self.rect.y, map_height - self.rect.height))
+
     #================
     # HP
     #================
@@ -103,5 +107,6 @@ class Player:
         pygame.draw.rect(self.screen, (0, 255, 0), (bar_x, bar_y, hp_width, bar_height))
         self.screen.blit(hp_text, (bar_x, bar_y))
 
-    def draw(self):
-        self.screen.blit(self.get_frame(), self.rect)
+    def draw(self, surface, camera):
+        frame = self.get_frame()
+        surface.blit(frame,(self.rect.x - camera.x,self.rect.y - camera.y))
