@@ -5,16 +5,22 @@
 
 
 import pygame
-from Collision_player import *
+from Collision_color import *
 from Enemy import Enemy
+from Damage_effect import DamageEffect
 
 class Player:
-    def __init__(self, screen, player_folder,hp=100):
+    def __init__(self, screen, player_folder,hp=100,damage=20):
         self.screen = screen
         self.start_x = 200
         self.start_y = 350
         self.hp = hp
         self.max_hp = self.hp
+        self.damage = damage
+        self.attack_cooldown = 300 # ms
+        self.last_attack_time = 0
+        self.effects = []
+        self.damage_image = None
 
 
         self.x = self.start_x
@@ -141,12 +147,16 @@ class Player:
 
         for enemy in enemies:
             if enemy.active and self.hitbox.colliderect(enemy.hitbox):
-                # empêche de traverser
+                # --- prevents player to pass through ennemies ---
                 self.rect.x = old_x
                 self.hitbox.x = old_x + 40
 
                 self.rect.y = old_y
                 self.hitbox.y = old_y + 70
+
+        # --- Attack ---
+        if keys[pygame.K_x]:
+            self.attack(enemies)
 
     #================
     # HP
@@ -161,6 +171,42 @@ class Player:
         pygame.draw.rect(self.screen, (0, 255, 0), (bar_x, bar_y, hp_width, bar_height))
         self.screen.blit(hp_text, (bar_x, bar_y))
 
+    #=================
+    # Attack
+    #=================
+    def attack(self,enemies):
+        if not self.damage_image:
+            return
+
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_attack_time < self.attack_cooldown:
+            return
+        self.last_attack_time = current_time
+
+        attack_range = 50
+        attack_rect = self.hitbox.copy()
+        if self.last_direction == "left":
+            attack_rect.x -= attack_range
+            effect_x, effect_y, angle = attack_rect.right, attack_rect.centery, 180
+        elif self.last_direction == "right":
+            attack_rect.x += attack_range
+            effect_x, effect_y, angle = attack_rect.left, attack_rect.centery, 0
+
+        # --- Apply the damage ---
+        for enemy in enemies:
+            if enemy.active and attack_rect.colliderect(enemy.hitbox):
+                enemy.hp -= self.damage
+                print(f"{enemy.name} takes {self.damage} damage")
+                if enemy.hp <= 0:
+                    enemy.active = False
+
+        # --- Visual Effect ---
+        rotated_image = pygame.transform.rotate(self.damage_image, angle)
+        effect = DamageEffect(effect_x - rotated_image.get_width() // 2,
+                              effect_y - rotated_image.get_height() // 2,
+                              rotated_image)
+        self.effects.append(effect)
+
     def draw(self, surface, camera):
         if not self.alive:
             overlay = pygame.Surface(surface.get_size())
@@ -168,7 +214,6 @@ class Player:
             overlay.fill((0, 0, 0))
             surface.blit(overlay, (0, 0))
 
-            # --- GAME OVER ---
             font = pygame.font.Font(None, 80)
             text = font.render("GAME OVER", True, (255, 0, 0))
 
@@ -176,5 +221,13 @@ class Player:
                                               surface.get_height() // 2))
             surface.blit(text, text_rect)
             return
-        frame = self.get_frame()
-        surface.blit(frame,(self.rect.x - camera.x,self.rect.y - camera.y))
+
+        # --- Player animation ---
+        surface.blit(self.get_frame(),
+                     (self.rect.x - camera.x, self.rect.y - camera.y))
+
+        # --- Effects ---
+        for effect in self.effects:
+            effect.draw(surface, camera)
+
+        self.effects = [e for e in self.effects if not e.is_finished()]
