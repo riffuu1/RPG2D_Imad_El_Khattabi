@@ -43,7 +43,7 @@ damage_image = pygame.transform.scale(damage_image, (100, 100))
 #==================
 # Player
 #==================
-folder_player = "./assets/Player/Moves"
+folder_player = "./assets/Player"
 player = Player(screen, folder_player)
 player.damage_image = damage_image
 
