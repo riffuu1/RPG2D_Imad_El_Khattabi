@@ -1,0 +1,32 @@
+import pygame
+
+class Map:
+    def __init__(self, width, height, bg_image, bg_name, enemies=None):
+        self.width = width
+        self.height = height
+        self.bg_image = bg_image
+        self.bg_name = bg_name
+        self.enemies = enemies if enemies else []
+
+    @staticmethod
+    def switch_map(current_map, player, map1, map2):
+        # border top
+        if player.rect.y == 0:
+            if current_map == map2:
+                player.rect.y = 1048
+                return map1
+
+        # border bottom
+        elif player.rect.y >= 1048:
+            if current_map == map1:
+                player.rect.y = 0
+                return map2
+
+
+        return current_map
+
+    def get_surface(self):
+        return self.bg_image
+
+    def draw(self, screen, camera):
+        screen.blit(self.bg_image, (-camera.x, -camera.y))

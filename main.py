@@ -4,10 +4,12 @@
 
 
 import pygame
+from pygame.display import get_surface
 
 from Player import Player
 from Camera import Camera
 from Enemy import Enemy
+from Map import Map
 
 pygame.init()
 
@@ -24,10 +26,12 @@ pygame.display.set_caption("Chroniques du Kraken oublié")
 #==================
 background_1 = pygame.image.load('assets/Backgrounds/background_1.png')
 background_1 = pygame.transform.scale(background_1, (1900, 1200))
-map_width = background_1.get_width()
-map_height = background_1.get_height()
 
-current_map = background_1
+background_2 = pygame.image.load('assets/Backgrounds/background_2.png')
+background_2 = pygame.transform.scale(background_2, (1900, 1200))
+
+
+
 
 #==================
 # Damage effect
@@ -47,8 +51,16 @@ player.damage_image = damage_image
 # Enemys
 #==================
 folder_enemy = "./assets/Enemys/octopus.png"
-enemy = Enemy(screen, "octopus", folder_enemy,800,400, 120)
+enemy = Enemy(screen, "octopus", folder_enemy,1200,700, 120)
 enemies = [enemy]
+
+#=========================
+# Maps
+#========================
+map_1 = Map(1900, 1200, background_1,"map_1",[])
+map_2 = Map(1900, 1200, background_2,"map_2",[enemy])
+maps = [map_1, map_2]
+current_map = map_1
 
 #=================
 # Camera
@@ -71,18 +83,19 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.blit(current_map, (-camera.x, -camera.y))
-    player.update(keys,map_width, map_height,current_map,enemies)
-    enemy.move(player,current_map)
-    camera.update(player, Width, Height, map_width, map_height)
+    current_map.draw(screen, camera)
+    player.update(keys,current_map.width, current_map.height, current_map.get_surface(),enemies)
+    current_map = Map.switch_map(current_map, player, map_1, map_2)
+    camera.update(player, Width, Height, current_map.width, current_map.height)
+
+    for enemy in current_map.enemies:
+        enemy.move(player, current_map.get_surface())
+        enemy.draw(screen, camera)
 
 
 
-    enemy.draw(screen,camera)
     player.draw(screen, camera)
     player.show_hp()
-
-    pygame.display.flip()
 
 
     pygame.display.flip()

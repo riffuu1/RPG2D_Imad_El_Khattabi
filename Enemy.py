@@ -25,7 +25,7 @@ class Enemy:
 
     def draw(self, screen,camera):
         if self.active:
-            self.screen.blit(self.image,(self.rect.x - camera.x, self.rect.y - camera.y))
+            screen.blit(self.image,(self.rect.x - camera.x, self.rect.y - camera.y))
 
     def update_hitbox(self):
         self.hitbox.topleft = (self.rect.x + 40, self.rect.y + 70)
