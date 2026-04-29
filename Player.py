@@ -175,6 +175,8 @@ class Player:
     # Attack
     #=================
     def attack(self,enemies):
+        if not self.damage_image:
+            return
 
         current_time = pygame.time.get_ticks()
         if current_time - self.last_attack_time < self.attack_cooldown:
@@ -205,7 +207,6 @@ class Player:
                               rotated_image)
         self.effects.append(effect)
 
-
     def draw(self, surface, camera):
         if not self.alive:
             overlay = pygame.Surface(surface.get_size())
@@ -213,7 +214,6 @@ class Player:
             overlay.fill((0, 0, 0))
             surface.blit(overlay, (0, 0))
 
-            # --- GAME OVER ---
             font = pygame.font.Font(None, 80)
             text = font.render("GAME OVER", True, (255, 0, 0))
 
@@ -221,5 +221,13 @@ class Player:
                                               surface.get_height() // 2))
             surface.blit(text, text_rect)
             return
-        frame = self.get_frame()
-        surface.blit(frame,(self.rect.x - camera.x,self.rect.y - camera.y))
+
+        # --- Player animation ---
+        surface.blit(self.get_frame(),
+                     (self.rect.x - camera.x, self.rect.y - camera.y))
+
+        # --- Effects ---
+        for effect in self.effects:
+            effect.draw(surface, camera)
+
+        self.effects = [e for e in self.effects if not e.is_finished()]

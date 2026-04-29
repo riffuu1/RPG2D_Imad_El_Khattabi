@@ -22,22 +22,31 @@ pygame.display.set_caption("Chroniques du Kraken oublié")
 #==================
 # Background
 #==================
-background_1 = pygame.image.load('Design/Backgrounds/background_1.png')
+background_1 = pygame.image.load('assets/Backgrounds/background_1.png')
 background_1 = pygame.transform.scale(background_1, (1900, 1200))
 map_width = background_1.get_width()
 map_height = background_1.get_height()
 
 current_map = background_1
+
+#==================
+# Damage effect
+#==================
+damage_image = pygame.image.load('assets/effect/slash.png')
+damage_image = pygame.transform.scale(damage_image, (100, 100))
+
+
 #==================
 # Player
 #==================
-folder_player = "./Design/Player/Moves"
+folder_player = "./assets/Player/Moves"
 player = Player(screen, folder_player)
+player.damage_image = damage_image
 
 #==================
 # Enemys
 #==================
-folder_enemy = "./Design/Enemys/octopus.png"
+folder_enemy = "./assets/Enemys/octopus.png"
 enemy = Enemy(screen, "octopus", folder_enemy,800,400, 120)
 enemies = [enemy]
 

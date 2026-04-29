@@ -12,5 +12,5 @@ class DamageEffect:
     #--- Check if the effect duration has elapsed. ---
         return pygame.time.get_ticks() - self.start_time > self.duration
 
-    def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+    def draw(self, screen, camera):
+        screen.blit(self.image, (self.x - camera.x, self.y - camera.y))
