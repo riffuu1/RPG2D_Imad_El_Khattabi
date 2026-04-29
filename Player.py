@@ -6,6 +6,7 @@
 
 import pygame
 from Collision_player import *
+from Enemy import Enemy
 
 class Player:
     def __init__(self, screen, player_folder,hp=100):
@@ -15,16 +16,18 @@ class Player:
         self.hp = hp
         self.max_hp = self.hp
 
+
         self.x = self.start_x
         self.y = self.start_y
         self.speed = 2
-        self.rect = pygame.Rect(self.x, self.y, 20, 20)
+        self.rect = pygame.Rect(self.x, self.y, 128, 128)
         self.hitbox = pygame.Rect(self.rect.x + 40, self.rect.y + 70, 48, 50)
         self.feet = pygame.Rect(self.x + 54, self.y + 118, 20, 10)
 
         self.frame_index = 0
         self.frame_speed = 0.05
         self.last_direction = "right"
+        self.alive = True
 
         #Animations
         self.animations = {
@@ -58,7 +61,6 @@ class Player:
     # Collisions
     #====================
     def collision(self, surface):
-        # --- test some points of the hitbox ---
         points = [
             self.hitbox.topleft,
             self.hitbox.topright,
@@ -79,7 +81,9 @@ class Player:
     #=====================
     # Moves
     #====================
-    def update(self, keys,map_width, map_height,surface):
+    def update(self, keys,map_width, map_height,surface,enemies):
+        if not self.alive:
+            return
         old_x, old_y = self.rect.x, self.rect.y
         in_movement = False
 
@@ -135,6 +139,15 @@ class Player:
         self.rect.x = max(0, min(self.rect.x, map_width - self.rect.width))
         self.rect.y = max(0, min(self.rect.y, map_height - self.rect.height))
 
+        for enemy in enemies:
+            if enemy.active and self.hitbox.colliderect(enemy.hitbox):
+                # empêche de traverser
+                self.rect.x = old_x
+                self.hitbox.x = old_x + 40
+
+                self.rect.y = old_y
+                self.hitbox.y = old_y + 70
+
     #================
     # HP
     #================
@@ -149,5 +162,19 @@ class Player:
         self.screen.blit(hp_text, (bar_x, bar_y))
 
     def draw(self, surface, camera):
+        if not self.alive:
+            overlay = pygame.Surface(surface.get_size())
+            overlay.set_alpha(180)
+            overlay.fill((0, 0, 0))
+            surface.blit(overlay, (0, 0))
+
+            # --- GAME OVER ---
+            font = pygame.font.Font(None, 80)
+            text = font.render("GAME OVER", True, (255, 0, 0))
+
+            text_rect = text.get_rect(center=(surface.get_width() // 2,
+                                              surface.get_height() // 2))
+            surface.blit(text, text_rect)
+            return
         frame = self.get_frame()
         surface.blit(frame,(self.rect.x - camera.x,self.rect.y - camera.y))

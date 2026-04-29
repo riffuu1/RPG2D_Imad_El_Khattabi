@@ -7,6 +7,7 @@ import pygame
 
 from Player import Player
 from Camera import Camera
+from Enemy import Enemy
 
 pygame.init()
 
@@ -33,6 +34,12 @@ current_map = background_1
 folder_player = "./Design/Player/Moves"
 player = Player(screen, folder_player)
 
+#==================
+# Enemys
+#==================
+folder_enemy = "./Design/Enemys/octopus.png"
+enemy = Enemy(screen, "octopus", folder_enemy,800,400, 120)
+enemies = [enemy]
 
 #=================
 # Camera
@@ -56,13 +63,13 @@ while running:
             running = False
 
     screen.blit(current_map, (-camera.x, -camera.y))
-    player.update(keys,map_width, map_height,current_map)
+    player.update(keys,map_width, map_height,current_map,enemies)
+    enemy.move(player,current_map)
     camera.update(player, Width, Height, map_width, map_height)
 
 
 
-
-
+    enemy.draw(screen,camera)
     player.draw(screen, camera)
     player.show_hp()
 
