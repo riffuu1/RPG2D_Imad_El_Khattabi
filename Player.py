@@ -5,7 +5,7 @@
 
 
 import pygame
-from Collision_player import *
+from Collision_color import *
 from Enemy import Enemy
 
 class Player:
@@ -141,7 +141,7 @@ class Player:
 
         for enemy in enemies:
             if enemy.active and self.hitbox.colliderect(enemy.hitbox):
-                # empêche de traverser
+                # --- prevents player to pass through ennemies ---
                 self.rect.x = old_x
                 self.hitbox.x = old_x + 40
 

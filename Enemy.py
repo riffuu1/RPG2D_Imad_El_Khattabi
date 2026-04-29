@@ -5,7 +5,7 @@
 import pygame
 import os
 import math
-from Collision_player import *
+from Collision_color import *
 
 class Enemy:
     def __init__(self,screen, name, image_path, x, y, hp):
@@ -37,7 +37,7 @@ class Enemy:
     #===============
     def move(self, player,collision_surface):
         if not self.active:
-            return  # ← Do nothing if the enemy is dead
+            return  # Do nothing if the enemy is dead
 
         dx = player.rect.centerx - self.rect.centerx
         dy = player.rect.centery - self.rect.centery
@@ -46,7 +46,7 @@ class Enemy:
         if distance == 0:
             return
 
-        if distance <= 200:  # normalize vector
+        if distance <= 200:  # --- Normalize vector ---
             dx /= distance
             dy /= distance
 
@@ -61,7 +61,7 @@ class Enemy:
             check_y = int(future_y + 100)
 
 
-
+            # --- Check the colors of map for possible collision ---
             if not check_collision_with_color(collision_surface, check_x, check_y) and not future_hitbox.colliderect(player.hitbox):
                 self.rect.x += dx * self.speed
                 self.rect.y += dy * self.speed
@@ -71,7 +71,7 @@ class Enemy:
                 self.hitbox.x = self.rect.x + 40
                 self.hitbox.y = self.rect.y + 70
 
-
+            # --- Check if enemy touches the player to hurt him ---
             if future_hitbox.colliderect(player.hitbox):
                 current_time = pygame.time.get_ticks()
 
