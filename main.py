@@ -10,6 +10,7 @@ from Player import Player
 from Camera import Camera
 from Enemy import Enemy
 from Map import Map
+from inventory_menu import inventory_menu
 
 pygame.init()
 
@@ -82,6 +83,9 @@ while running:
     for event in events:
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_i:
+                inventory_menu(screen,pygame.font.Font(None, 36), player)
 
     current_map.draw(screen, camera)
     player.update(keys,current_map.width, current_map.height, current_map.get_surface(),enemies)
