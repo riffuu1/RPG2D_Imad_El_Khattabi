@@ -1,4 +1,5 @@
 import pygame
+from Items import *
 
 class GameObject:
     def __init__(self, image, x, y):
@@ -24,3 +25,16 @@ class PickableObject(GameObject):
             if len(player.inventory) < 8:
                 player.add_item(self.item)
                 self.active = False
+
+class Door(GameObject):
+    def __init__(self, x, y, image, door_id):
+        super().__init__(image,x,y)
+        self.door = door_id
+        self.active = True
+
+    def unlock(self,player, e_pressed):
+        for item in player.inventory:
+            if isinstance(item, Key) and item.key_id == self.door:
+                self.active = False
+                print("Door unlocked")
+                return
