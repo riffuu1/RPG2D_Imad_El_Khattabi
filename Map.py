@@ -1,12 +1,13 @@
 import pygame
 
 class Map:
-    def __init__(self, width, height, bg_image, bg_name, enemies=None):
+    def __init__(self, width, height, bg_image, bg_name, enemies=None, pickable_objects=None):
         self.width = width
         self.height = height
         self.bg_image = bg_image
         self.bg_name = bg_name
         self.enemies = enemies if enemies else []
+        self.pickable_objects = pickable_objects if pickable_objects else []
 
     @staticmethod
     def switch_map(current_map, player, map1, map2):
@@ -30,3 +31,9 @@ class Map:
 
     def draw(self, screen, camera):
         screen.blit(self.bg_image, (-camera.x, -camera.y))
+
+        #Pickable objects
+        for obj in self.pickable_objects:
+            if hasattr(obj, "active") and not obj.active:
+                continue
+            obj.draw(screen,camera)

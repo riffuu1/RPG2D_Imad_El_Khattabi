@@ -6,9 +6,9 @@ class GameObject:
         self.image = image
         self.active = True
 
-    def draw(self, screen):
+    def draw(self, screen, camera):
         if self.active:
-            screen.blit(self.image, self.rect)
+            screen.blit(self.image, (self.rect.x - camera.x, self.rect.y - camera.y))
 
     def interact(self):
         pass
@@ -20,6 +20,7 @@ class PickableObject(GameObject):
         self.item = item
 
     def interact(self, player, e_pressed):
-        if self.active and self.rect.colliderect(player.feet) and e_pressed:
-            player.add_item(self.item)
-            self.active = False
+        if self.active and self.rect.colliderect(player.rect) and e_pressed:
+            if len(player.inventory) < 8:
+                player.add_item(self.item)
+                self.active = False
