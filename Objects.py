@@ -32,15 +32,3 @@ class Door(GameObject):
         self.door = door_id
         self.active = True
 
-    def unlock(self,player, e_pressed):
-        if not self.active:
-            return
-
-        if not e_pressed:
-            return
-
-        for item in player.inventory:
-            if isinstance(item, Key) and item.key_id == self.door:
-                self.active = False
-                print("Door unlocked")
-                return

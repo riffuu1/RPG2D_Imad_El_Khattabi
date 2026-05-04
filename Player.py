@@ -89,7 +89,7 @@ class Player:
     #=====================
     # Moves
     #====================
-    def update(self, keys,map_width, map_height,surface,enemies):
+    def update(self, keys,map_width, map_height,surface,enemies,doors):
         if not self.alive:
             return
         old_x, old_y = self.rect.x, self.rect.y
@@ -154,6 +154,13 @@ class Player:
                 self.hitbox.x = old_x + 40
 
                 self.rect.y = old_y
+                self.hitbox.y = old_y + 70
+
+        for door in doors:
+            if door.active and self.hitbox.colliderect(door.rect):
+                self.rect.x = old_x
+                self.rect.y = old_y
+                self.hitbox.x = old_x + 40
                 self.hitbox.y = old_y + 70
 
         # --- Attack ---

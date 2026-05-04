@@ -65,24 +65,28 @@ potion_image = pygame.transform.scale(potion_image, (50, 50))
 potion_item = Potion("Potion", potion_image)
 pickable_potion =PickableObject(200,350,potion_image,potion_item)
 
-
+skull_key_image = pygame.image.load('assets/Items/Skull_key.png.')
+skull_key_image = pygame.transform.scale(skull_key_image, (50, 50))
+skull_item = Key("skull_key","skull_key",skull_key_image)
+pickable_key = PickableObject(200,490,skull_key_image,skull_item)
 
 
 #==========================
 # Doors
 #=========================
-door_image = pygame.image.load('assets/Doors/door_map_2.png')
-door_image = pygame.transform.scale(door_image, (100, 100))
+door_image = pygame.image.load('assets/Door/door_map_2.png')
+door_image = pygame.transform.scale(door_image, (1402, 36))
 door_id = "skull_key"
-Door_1 = Door("200",350,door_image,door_id)
+door_1 = Door(210,996,door_image,door_id)
+doors = [door_1]
 
 
 
 #=========================
 # Maps
 #========================
-map_1 = Map(1900, 1200, background_1,"map_1",[],[pickable_potion])
-map_2 = Map(1900, 1200, background_2,"map_2",[enemy],[])
+map_1 = Map(1900, 1200, background_1,"map_1",[],[pickable_potion,pickable_key],[])
+map_2 = Map(1900, 1200, background_2,"map_2",[enemy],[],[door_1])
 maps = [map_1, map_2]
 current_map = map_1
 
@@ -116,7 +120,7 @@ while running:
                 e_pressed = False
 
     current_map.draw(screen, camera)
-    player.update(keys,current_map.width, current_map.height, current_map.get_surface(),enemies)
+    player.update(keys,current_map.width, current_map.height, current_map.get_surface(),enemies,current_map.door_objects)
 
     current_map = Map.switch_map(current_map, player, map_1, map_2)
     camera.update(player, Width, Height, current_map.width, current_map.height)
@@ -130,7 +134,9 @@ while running:
         obj.interact(player, e_pressed)
 
     for door in current_map.door_objects:
-        door.unlock(player, e_pressed)
+        for item in player.inventory:
+            if isinstance(item, Key):
+                item.use_on(door, player, e_pressed)
 
     player.draw(screen, camera)
     player.show_hp()
