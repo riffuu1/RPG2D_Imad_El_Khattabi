@@ -1,6 +1,6 @@
 # Author : El Khattabi Imad
 # Date: 28.04.2026
-# Version : 1.5
+# Version : 2.0
 
 
 import pygame

@@ -1,3 +1,8 @@
+# Author : El Khattabi Imad
+# Date: 04.05.2026
+# Version : 1.0
+
+
 import pygame
 from Player import Player
 from Items import *
