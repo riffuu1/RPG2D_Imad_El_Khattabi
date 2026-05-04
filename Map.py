@@ -1,13 +1,14 @@
 import pygame
 
 class Map:
-    def __init__(self, width, height, bg_image, bg_name, enemies=None, pickable_objects=None):
+    def __init__(self, width, height, bg_image, bg_name, enemies=None, pickable_objects=None,door_objects=None):
         self.width = width
         self.height = height
         self.bg_image = bg_image
         self.bg_name = bg_name
         self.enemies = enemies if enemies else []
         self.pickable_objects = pickable_objects if pickable_objects else []
+        self.door_objects = door_objects if door_objects else []
 
     @staticmethod
     def switch_map(current_map, player, map1, map2):
@@ -37,3 +38,9 @@ class Map:
             if hasattr(obj, "active") and not obj.active:
                 continue
             obj.draw(screen,camera)
+
+        # door objects
+        for obj in self.door_objects:
+            if hasattr(obj, "active") and not obj.active:
+                continue
+            obj.draw(screen, camera)

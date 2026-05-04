@@ -6,7 +6,7 @@
 import pygame
 from pygame.display import get_surface
 
-from Objects import PickableObject
+from Objects import PickableObject, Door
 from Player import Player
 from Camera import Camera
 from Enemy import Enemy
@@ -67,6 +67,17 @@ pickable_potion =PickableObject(200,350,potion_image,potion_item)
 
 
 
+
+#==========================
+# Doors
+#=========================
+door_image = pygame.image.load('assets/Doors/door_map_2.png')
+door_image = pygame.transform.scale(door_image, (100, 100))
+door_id = "skull_key"
+Door_1 = Door("200",350,door_image,door_id)
+
+
+
 #=========================
 # Maps
 #========================
@@ -117,6 +128,9 @@ while running:
 
     for obj in current_map.pickable_objects:
         obj.interact(player, e_pressed)
+
+    for door in current_map.door_objects:
+        door.unlock(player, e_pressed)
 
     player.draw(screen, camera)
     player.show_hp()
