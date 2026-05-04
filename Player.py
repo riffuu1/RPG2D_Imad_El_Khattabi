@@ -214,9 +214,10 @@ class Player:
     #=================
 
     def add_item(self, item: Item):
-        if item not in self.inventory:
-            self.inventory.append(item)
-            print(f"{item.name} added to inventory")
+        if self.inventory.count(item) <8:
+            if item not in self.inventory:
+                self.inventory.append(item)
+                print(f"{item.name} added to inventory")
 
     def remove_item(self, item: Item):
         if item in self.inventory:
