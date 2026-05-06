@@ -1,6 +1,6 @@
 # Author : El Khattabi Imad
 # Date: 04.05.2026
-# Version : 2.0
+# Version : 2.1
 
 
 import pygame
@@ -16,19 +16,36 @@ class Map:
         self.door_objects = door_objects if door_objects else []
 
     @staticmethod
-    def switch_map(current_map, player, map1, map2):
-        # border top
+    def switch_map(current_map, player, map1, map2,map3,map4):
+        # --- Border top ---
         if player.rect.y == 0:
             if current_map == map2:
                 player.rect.y = 1048
                 return map1
+            if current_map == map3:
+                player.rect.y = 1048
+                return map2
 
-        # border bottom
+        # --- Border bottom ---
         elif player.rect.y >= 1048:
             if current_map == map1:
                 player.rect.y = 0
                 return map2
+            if current_map == map2:
+                player.rect.y = 0
+                return map3
+        # --- Border left ---
+        elif player.rect.x == 0:
+            if current_map == map4:
+                player.rect.x = 1468
+                return map3
 
+        # --- Border right ---
+        elif player.rect.x <= 1484 and player.rect.x >= 1470 and player.rect.y >= 800:
+            if current_map == map3:
+                player.rect.x = 0
+                player.rect.y = 950
+                return map4
 
         return current_map
 

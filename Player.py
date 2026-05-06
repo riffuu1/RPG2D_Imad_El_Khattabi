@@ -132,6 +132,8 @@ class Player:
             self.last_direction = "right"
             in_movement = True
 
+        print(self.rect.x, self.rect.y)
+
         self.hitbox.x = self.rect.x + 40
 
         # --- Horizontal Collision ---
