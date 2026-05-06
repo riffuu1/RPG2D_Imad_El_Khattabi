@@ -18,12 +18,12 @@ Un jeu style RPG en 2D de type action-exploration, dans lequel nous incarnons un
 Lancer le fichier "main.py"
 
 ### Contrôles:
-    Déplacer à gauche : 
-    Déplacer à droite :
-    Déplacer en haut :
-    Déplacer en bas :
+    Déplacer à gauche : ←
+    Déplacer à droite : →
+    Déplacer en haut : ↑
+    Déplacer en bas : ↓
     L'inventaire : I
     Prendre un objet : E
-    Utiliser un objet dans l'inventaire : E
+    Utiliser un objet Item : E
     Attaquer : X
-    Mettre Pause : Esc
+    Mettre en Pause : Esc
