@@ -119,6 +119,7 @@ clock = pygame.time.Clock()
 running = True
 e_pressed = False
 
+
 while running:
     keys = pygame.key.get_pressed()
     events = pygame.event.get()
@@ -135,26 +136,43 @@ while running:
             if event.key == pygame.K_e:
                 e_pressed = False
 
+
     current_map.draw(screen, camera)
-    player.update(keys,current_map.width, current_map.height, current_map.get_surface(),current_map.enemies,current_map.door_objects)
+    if player.alive:
+        player.update(keys,current_map.width, current_map.height, current_map.get_surface(),current_map.enemies,current_map.door_objects)
 
-    current_map = Map.switch_map(current_map, player, map_1, map_2,map_3,map_4)
-    camera.update(player, Width, Height, current_map.width, current_map.height)
+        current_map = Map.switch_map(current_map, player, map_1, map_2,map_3,map_4)
+        camera.update(player, Width, Height, current_map.width, current_map.height)
 
-    for enemy in current_map.enemies:
-        enemy.move(player, current_map.get_surface())
-        enemy.draw(screen, camera)
+        for enemy in current_map.enemies:
+            enemy.move(player, current_map.get_surface())
+            enemy.draw(screen, camera)
 
 
-    for obj in current_map.pickable_objects:
-        obj.interact(player, e_pressed)
+        for obj in current_map.pickable_objects:
+            obj.interact(player, e_pressed)
 
-    for door in current_map.door_objects:
-        for item in player.inventory:
-            if isinstance(item, Key):
-                item.use_on(door, player, e_pressed)
+        for door in current_map.door_objects:
+            for item in player.inventory:
+                if isinstance(item, Key):
+                    item.use_on(door, player, e_pressed)
 
-    player.draw(screen, camera)
+    result = player.draw(screen, camera,events)
+    if result == "restart":
+        player.reset()
+        current_map = map_1
+
+        # --- Reset ennemis ---
+        for enemy in enemies:
+            enemy.reset()
+
+        # --- Reset objets ---
+        for m in maps:
+            for obj in m.pickable_objects:
+                obj.reset()
+
+            for door in m.door_objects:
+                door.reset() # ou leur valeur initiale
     player.show_hp()
     player.show_score()
 

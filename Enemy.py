@@ -12,16 +12,27 @@ class Enemy:
         self.screen = screen
         self.name = name
         self.hp = hp
+        self.max_hp = self.hp
         self.speed = 1.5
         self.image = pygame.image.load(image_path)
         self.image = pygame.transform.scale(self.image,(128,128))
         self.x = x
         self.y = y
+        self.start_x = x
+        self.start_y = y
         self.rect = self.image.get_rect(topleft=(x,y))
         self.hitbox = pygame.Rect(self.rect.x + 40, self.rect.y + 70, 48, 50)
         self.active = True
         self.attack_cooldown = 1000
         self.last_attack_time = 0
+
+    def reset(self):
+        self.x = self.start_x
+        self.y = self.start_y
+        self.rect.topleft = (self.x, self.y)
+        self.update_hitbox()
+        self.hp = self.max_hp
+        self.active = True
 
     def draw(self, screen,camera):
         if self.active:

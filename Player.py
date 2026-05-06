@@ -248,12 +248,25 @@ class Player:
         if isinstance(item, Potion):
             self.remove_item(item)
 
+    #====================
+    # RESET
+    #===================
+    def reset(self):
+        self.hp = self.max_hp
+        self.alive = True
+        self.rect.x = self.start_x
+        self.rect.y = self.start_y
+        self.hitbox.x = self.rect.x + 40
+        self.hitbox.y = self.rect.y + 70
+        self.score = 0
+        self.inventory.clear()
+
 
 
     #================
     # Affichage
     #================
-    def draw(self, surface, camera):
+    def draw(self, surface, camera,events):
         if not self.alive:
             overlay = pygame.Surface(surface.get_size())
             overlay.set_alpha(180)
@@ -271,7 +284,23 @@ class Player:
             surface.blit(text1, text_rect_1)
             surface.blit(text2, text_rect_2)
 
-            return
+            button_font = pygame.font.Font(None, 50)
+            button_text = button_font.render("RESTART", True, (0, 0, 0))
+
+            button_rect = pygame.Rect(0, 0, 200, 60)
+            button_rect.center = (surface.get_width() // 2, surface.get_height() // 2 + 120)
+
+            # Dessin bouton
+            pygame.draw.rect(surface, (255, 255, 255), button_rect, border_radius=10)
+            surface.blit(button_text, button_text.get_rect(center=button_rect.center))
+
+            for event in events:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if button_rect.collidepoint(event.pos):
+                            return "restart"
+
+            return "game_over"
 
         # --- Player animation ---
         surface.blit(self.get_frame(),

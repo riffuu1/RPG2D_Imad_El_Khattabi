@@ -19,6 +19,9 @@ class GameObject:
     def interact(self):
         pass
 
+    def reset(self):
+        self.active = True
+
 class PickableObject(GameObject):
     def __init__(self, x, y, image, item):
         # --- super() initializes parent class attributes (self.rect, self.image, self.active) ---
