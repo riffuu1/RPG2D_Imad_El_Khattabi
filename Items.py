@@ -36,6 +36,7 @@ class Key(Item):
 
         if self.key_id == door.door:
             door.active = False
+            player.score +=50
             player.remove_item(self)
             print("Door unlocked with key:", self.name)
 

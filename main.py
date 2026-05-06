@@ -156,6 +156,7 @@ while running:
 
     player.draw(screen, camera)
     player.show_hp()
+    player.show_score()
 
 
     pygame.display.flip()

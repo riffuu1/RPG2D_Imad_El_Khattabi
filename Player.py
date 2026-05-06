@@ -17,6 +17,7 @@ class Player:
         self.start_y = 350
         self.hp = hp
         self.max_hp = self.hp
+        self.score = 0
         self.inventory = []
         self.damage = damage
         self.attack_cooldown = 300 # ms
@@ -183,6 +184,14 @@ class Player:
         pygame.draw.rect(self.screen, (0, 255, 0), (bar_x, bar_y, hp_width, bar_height))
         self.screen.blit(hp_text, (bar_x, bar_y))
 
+    #================
+    # Score
+    #================
+    def show_score(self):
+        font = pygame.font.Font(None, 36)
+        score_text = font.render(f"Score: {self.score}", True, (255, 255, 255))
+        self.screen.blit(score_text, (20, 50))
+
     #=================
     # Attack
     #=================
@@ -211,6 +220,7 @@ class Player:
                 print(f"{enemy.name} takes {self.damage} damage")
                 if enemy.hp <= 0:
                     enemy.active = False
+                    self.score += 100
 
         # --- Visual Effect ---
         rotated_image = pygame.transform.rotate(self.damage_image, angle)
@@ -251,11 +261,16 @@ class Player:
             surface.blit(overlay, (0, 0))
 
             font = pygame.font.Font(None, 80)
-            text = font.render("GAME OVER", True, (255, 0, 0))
+            text1 = font.render("GAME OVER", True, (255, 0, 0))
+            text2 = font.render(f"Score final : {self.score}", True, (255, 255, 255))
 
-            text_rect = text.get_rect(center=(surface.get_width() // 2,
-                                              surface.get_height() // 2))
-            surface.blit(text, text_rect)
+            text_rect_1 = text1.get_rect(center=(surface.get_width() // 2,
+                                              surface.get_height() // 2 - 40))
+            text_rect_2 = text2.get_rect(center=(surface.get_width() // 2,
+                                              surface.get_height() // 2 + 40))
+            surface.blit(text1, text_rect_1)
+            surface.blit(text2, text_rect_2)
+
             return
 
         # --- Player animation ---
