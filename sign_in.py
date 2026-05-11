@@ -9,9 +9,17 @@ WIDTH, HEIGHT = 800, 700
 # ======================
 # TEXT DRAW
 # ======================
-def draw_text(screen, text, font, color, x, y):
-    img = font.render(text, True, color)
-    screen.blit(img, (x, y))
+def draw_text(screen, text, font, color, x, y, center=False):
+    lines = text.split("\n")
+
+    for i, line in enumerate(lines):
+        img = font.render(line, True, color)
+
+        if center:
+            rect = img.get_rect(center=(x, y + i * 40))
+            screen.blit(img, rect)
+        else:
+            screen.blit(img, (x, y + i * 40))
 
 
 # ======================
@@ -47,10 +55,10 @@ class Popup:
         pygame.draw.rect(screen, (200, 0, 0), rect, 3)
 
         # message
-        draw_text(screen, self.message, font, (255, 255, 255), rect.x + 30, rect.y + 80)
+        draw_text(screen, self.message, font,(255, 255, 255), rect.centerx, rect.y + 70, center=True)
 
         # button OK
-        ok_rect = pygame.Rect(rect.x + 200, rect.y + 130, 100, 40)
+        ok_rect = pygame.Rect(rect.centerx - 50, rect.y + 130, 100, 40)
         pygame.draw.rect(screen, (70, 130, 180), ok_rect)
         draw_text(screen, "OK", font, (255, 255, 255), ok_rect.x + 35, ok_rect.y + 5)
 
@@ -60,7 +68,7 @@ class Popup:
 # ======================
 # MAIN SCREEN
 # ======================
-def login_screen():
+def register_screen():
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Register")
@@ -84,7 +92,7 @@ def login_screen():
         # ======================
         # TITLE
         # ======================
-        draw_text(screen, "Chroniques du Kraken oublié", font, (255, 255, 255), 150, 100)
+        draw_text(screen, "Chroniques du Kraken oublié", font, (255, 255, 255), 200, 100)
 
         # ======================
         # INPUT BOXES
@@ -108,26 +116,30 @@ def login_screen():
         pygame.draw.rect(screen, (70, 130, 180), register_button)
         draw_text(screen, "Register", font, (255, 255, 255), 340, 537)
 
+        login_button = pygame.Rect(240, 620, 350, 60)
+        pygame.draw.rect(screen, (70, 130, 180), login_button)
+        draw_text(screen, "Already have an account", font, (255, 255, 255), 250, 637)
+
         # ======================
         # EVENTS
         # ======================
-        ok_rect = None
+        ok_rect = popup.draw(screen, font)
 
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
                 return False
 
-            # CLICK
+            # --- Click ---
             if event.type == pygame.MOUSEBUTTONDOWN:
 
-                # close popup first
+                # --- close popup first ---
                 if popup.active:
                     if ok_rect and ok_rect.collidepoint(event.pos):
                         popup.hide()
                     continue
 
-                # input select
+                # --- input select ---
                 if 220 <= event.pos[1] <= 270:
                     active_input = "username"
                 elif 320 <= event.pos[1] <= 370:
@@ -135,7 +147,7 @@ def login_screen():
                 elif 420 <= event.pos[1] <= 470:
                     active_input = "confirm_password"
 
-                # register button
+                # --- register button ---
                 if register_button.collidepoint(event.pos):
 
                     if username == "" or password == "" or confirm_password == "":
@@ -143,7 +155,7 @@ def login_screen():
                         continue
 
                     if password != confirm_password:
-                        popup.show("Les mots de passe ne correspondent pas")
+                        popup.show("Les mots de passe \nne correspondent pas")
                         continue
 
                     success, message = register_user(username, password)
@@ -153,7 +165,7 @@ def login_screen():
                     else:
                         popup.show(message)
 
-            # KEYBOARD
+            # --- Keyboard ---
             if event.type == pygame.KEYDOWN and not popup.active:
 
                 if event.key == pygame.K_BACKSPACE:
@@ -184,4 +196,4 @@ def login_screen():
         pygame.display.update()
 
 
-login_screen()
+register_screen()
