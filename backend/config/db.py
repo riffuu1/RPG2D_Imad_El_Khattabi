@@ -57,3 +57,32 @@ def register_user(username, password):
     finally:
         cursor.close()
         conn.close()
+
+def login_user(username, password):
+    conn = pool.get_connection()
+    cursor = conn.cursor()
+
+    try:
+        # chercher user
+        query = "SELECT password FROM players WHERE username = %s"
+        cursor.execute(query, (username,))
+
+        player = cursor.fetchone()
+
+        if not player:
+            return False, "Utilisateur ou mot de passe incorrect"
+
+        stored_password = player[0]
+
+        # vérifier hash bcrypt
+        if bcrypt.checkpw(
+            password.encode(),
+            stored_password.encode()
+        ):
+            return True, "Connexion réussie"
+        else:
+            return False, "Utilisateur ou mot de passe incorrect"
+
+    finally:
+        cursor.close()
+        conn.close()
