@@ -18,6 +18,9 @@ class Player:
         self.hp = hp
         self.max_hp = self.hp
         self.score = 0
+        self.time = pygame.time.get_ticks()
+        self.count = 999
+        self.timer_running = True
         self.inventory = []
         self.damage = damage
         self.attack_cooldown = 300 # ms
@@ -192,6 +195,30 @@ class Player:
         score_text = font.render(f"Score: {self.score}", True, (255, 255, 255))
         self.screen.blit(score_text, (20, 50))
 
+    #===============
+    # Time
+    #===============
+    def countdown(self):
+
+        if not self.timer_running:
+            return
+
+        now = pygame.time.get_ticks()
+
+        if now - self.time >= 1000:
+            self.count -= 1
+            self.time = now
+
+            if self.count <= 0:
+                self.count = 0
+                self.timer_running = False
+
+    def show_time(self, screen):
+        font = pygame.font.Font(None, 36)
+        text = font.render(f"Time : {self.count}", True, (255, 255, 255))
+        screen.blit(text, (650, 20))
+
+
     #=================
     # Attack
     #=================
@@ -268,6 +295,7 @@ class Player:
     #================
     def draw(self, surface, camera,events):
         if not self.alive:
+            self.timer_running = False
             overlay = pygame.Surface(surface.get_size())
             overlay.set_alpha(180)
             overlay.fill((0, 0, 0))

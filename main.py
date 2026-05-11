@@ -150,6 +150,8 @@ def game(screen):
 
             current_map = Map.switch_map(current_map, player, map_1, map_2,map_3,map_4)
             camera.update(player, Width, Height, current_map.width, current_map.height)
+            player.countdown()
+            player.show_time(screen)
 
             for enemy in current_map.enemies:
                 enemy.move(player, current_map.get_surface())
