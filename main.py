@@ -13,8 +13,15 @@ from Enemy import Enemy
 from Map import Map
 from inventory_menu import inventory_menu
 from Items import *
+from sign_in import register_screen
 
 pygame.init()
+
+connected = register_screen()
+
+if not connected:
+    pygame.quit()
+    quit()
 
 #================
 # Window
