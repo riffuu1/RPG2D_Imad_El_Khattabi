@@ -6,7 +6,7 @@
 import pygame
 
 class Map:
-    def __init__(self, width, height, bg_image, bg_name, enemies=None, pickable_objects=None,door_objects=None):
+    def __init__(self, width, height, bg_image, bg_name, enemies=None, pickable_objects=None,door_objects=None, treasure_objects=None):
         self.width = width
         self.height = height
         self.bg_image = bg_image
@@ -14,6 +14,8 @@ class Map:
         self.enemies = enemies if enemies else []
         self.pickable_objects = pickable_objects if pickable_objects else []
         self.door_objects = door_objects if door_objects else []
+        self.treasure_objects = treasure_objects if treasure_objects else []
+
 
     @staticmethod
     def switch_map(current_map, player, map1, map2,map3,map4):
@@ -55,14 +57,18 @@ class Map:
     def draw(self, screen, camera):
         screen.blit(self.bg_image, (-camera.x, -camera.y))
 
-        #Pickable objects
+        # --- pickable objects ---
         for obj in self.pickable_objects:
             if hasattr(obj, "active") and not obj.active:
                 continue
             obj.draw(screen,camera)
 
-        # door objects
+        # --- door objects ---
         for obj in self.door_objects:
             if hasattr(obj, "active") and not obj.active:
                 continue
+            obj.draw(screen, camera)
+
+        # --- tresor objects ---
+        for obj in self.treasure_objects:
             obj.draw(screen, camera)

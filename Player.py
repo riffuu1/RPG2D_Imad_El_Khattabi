@@ -20,7 +20,9 @@ class Player:
         self.score = 0
         self.time = pygame.time.get_ticks()
         self.count = 999
+        self.victory_score_added = False
         self.timer_running = True
+        self.win = False
         self.inventory = []
         self.damage = damage
         self.attack_cooldown = 300 # ms
@@ -287,6 +289,10 @@ class Player:
         self.hitbox.y = self.rect.y + 70
         self.score = 0
         self.inventory.clear()
+        self.victory_score_added = False
+        self.win = False
+        self.count = 999
+        self.timer_running = True
 
 
 
@@ -306,9 +312,9 @@ class Player:
             text2 = font.render(f"Score final : {self.score}", True, (255, 255, 255))
 
             text_rect_1 = text1.get_rect(center=(surface.get_width() // 2,
-                                              surface.get_height() // 2 - 40))
+                                                 surface.get_height() // 2 - 40))
             text_rect_2 = text2.get_rect(center=(surface.get_width() // 2,
-                                              surface.get_height() // 2 + 40))
+                                                 surface.get_height() // 2 + 40))
             surface.blit(text1, text_rect_1)
             surface.blit(text2, text_rect_2)
 
@@ -322,13 +328,25 @@ class Player:
             pygame.draw.rect(surface, (255, 255, 255), button_rect, border_radius=10)
             surface.blit(button_text, button_text.get_rect(center=button_rect.center))
 
+            button_font_2 = pygame.font.Font(None, 50)
+            button_text_2 = button_font_2.render("QUIT", True, (0, 0, 0))
+
+            button_rect_2 = pygame.Rect(0, 0, 220, 60)
+            button_rect_2.center = (surface.get_width() // 2, surface.get_height() // 2 + 260)
+
+            pygame.draw.rect(surface, (255, 255, 255), button_rect_2, border_radius=10)
+            surface.blit(button_text_2, button_text_2.get_rect(center=button_rect_2.center))
+
             for event in events:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         if button_rect.collidepoint(event.pos):
                             return "restart"
+                        if button_rect_2.collidepoint(event.pos):
+                            return "quit"
 
             return "game_over"
+
 
         # --- Player animation ---
         surface.blit(self.get_frame(),

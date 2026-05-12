@@ -6,7 +6,7 @@
 import pygame
 from pygame.display import get_surface
 
-from Objects import PickableObject, Door
+from Objects import PickableObject, Door, Tresor
 from Player import Player
 from Camera import Camera
 from Enemy import Enemy
@@ -15,6 +15,7 @@ from inventory_menu import inventory_menu
 from Items import *
 from sign_in import register_screen
 from log_in import login_screen
+
 
 pygame.init()
 
@@ -101,15 +102,21 @@ def game(screen):
     door_1 = Door(210,996,door_image,door_id)
     doors = [door_1]
 
-
+    #=================
+    # Tresor
+    #=================
+    tresor_image = pygame.image.load('assets/Tresor/Last tresor.png')
+    tresor_image = pygame.transform.scale(tresor_image, (250, 250))
+    final_tresor = Tresor(870,78, tresor_image)
+    tresors=[final_tresor]
 
     #=========================
     # Maps
     #========================
-    map_1 = Map(1900, 1200, background_1,"map_1",[],[pickable_potion,pickable_key],[])
-    map_2 = Map(1900, 1200, background_2,"map_2",[octopus_1,octopus_2,octopus_3,octopus_4],[],[door_1])
-    map_3 = Map(1900, 1200, background_3,"map_3",[scary_fish_1,scary_fish_2,scary_fish_3],[],[pickable_key])
-    map_4 = Map(1900, 1200, background_4,"map_4",[],[],[])
+    map_1 = Map(1900, 1200, background_1,"map_1",[],[pickable_potion,pickable_key],[],[])
+    map_2 = Map(1900, 1200, background_2,"map_2",[octopus_1,octopus_2,octopus_3,octopus_4],[],[door_1],[])
+    map_3 = Map(1900, 1200, background_3,"map_3",[scary_fish_1,scary_fish_2,scary_fish_3],[],[pickable_key],[])
+    map_4 = Map(1900, 1200, background_4,"map_4",[],[],[],[final_tresor])
     maps = [map_1, map_2,map_3,map_4]
     current_map = map_1
 
@@ -117,6 +124,50 @@ def game(screen):
     # Camera
     #=================
     camera = Camera()
+
+    #=====================
+    # End function
+    #====================
+    def end_screen(screen, player):
+        clock = pygame.time.Clock()
+        waiting = True
+
+        while waiting:
+            screen.fill((0, 0, 0))
+
+            font = pygame.font.Font(None, 80)
+
+            if player.win:
+                text = font.render("VICTORY !!!", True, (0, 255, 0))
+            else:
+                text = font.render("GAME OVER", True, (255, 0, 0))
+
+            score = pygame.font.Font(None, 50).render(
+                f"Score final : {player.score}", True, (255, 255, 255)
+            )
+
+            info = pygame.font.Font(None, 36).render(
+                "Appuie n'importe quelle touche pour quitter",
+                True,
+                (200, 200, 200)
+            )
+
+            screen.blit(text, (250, 200))
+            screen.blit(score, (250, 300))
+            screen.blit(info, (120, 400))
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return "quit"
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        return "restart"
+                    if event.key == pygame.K_ESCAPE:
+                        return "quit"
+
+            clock.tick(60)
 
 
     #==================
@@ -166,24 +217,37 @@ def game(screen):
                     if isinstance(item, Key):
                         item.use_on(door, player, e_pressed)
 
+            for tresor in current_map.treasure_objects:
+                result = tresor.win(player)
+
+                if result == "win":
+                    player.win = True
+                    player.alive = False
+                    return end_screen(screen, player)
+
         result = player.draw(screen, camera,events)
         if result == "restart":
             player.reset()
             current_map = map_1
 
-            # --- Reset ennemis ---
+            # --- Reset enemies ---
             for enemy in enemies:
                 enemy.reset()
 
-            # --- Reset objets ---
+            # --- Reset objects ---
             for m in maps:
                 for obj in m.pickable_objects:
                     obj.reset()
 
                 for door in m.door_objects:
                     door.reset() # ou leur valeur initiale
+
         player.show_hp()
         player.show_score()
+
+
+
+
 
 
         pygame.display.flip()

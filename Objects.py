@@ -40,3 +40,15 @@ class Door(GameObject):
         self.door = door_id
         self.active = True
 
+class Tresor(GameObject):
+
+    def __init__(self, x, y, image):
+        super().__init__(image, x, y)
+        self.finished = False
+
+    def win(self, player):
+        if self.rect.colliderect(player.hitbox):
+            self.finished = True
+            return "win"
+
+
