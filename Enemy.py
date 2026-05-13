@@ -88,6 +88,7 @@ class Enemy:
 
                 if current_time - self.last_attack_time >= self.attack_cooldown:
                     player.hp -= 10
+                    player.score -=10
                     player.hp = max(0, player.hp)
                     if player.hp <= 0:
                         player.alive = False
