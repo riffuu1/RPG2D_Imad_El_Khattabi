@@ -12,6 +12,8 @@ Un jeu style RPG en 2D de type action-exploration, dans lequel nous incarnons un
 ### Dépendances:
     Pygame : pip install pygame
     MySQL : pip install mysql-connector-python
+    Hashage du mot de passe : pip install bcrypt
+    Liaison entre le .env et le fichier db.py : pip install python-dotenv
 
 ## Utilisation:
 
