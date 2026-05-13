@@ -139,12 +139,25 @@ def game(screen, username):
     pearl_17 = Pearls(1414,490, pearl_3_image,75)
     pearls= [pearl_1,pearl_2,pearl_3,pearl_4,pearl_5,pearl_6,pearl_7,pearl_8,pearl_9,pearl_10,pearl_11,pearl_12,pearl_13,pearl_14,pearl_15,pearl_16,pearl_17]
 
+    #===========================
+    # Traps
+    #==========================
+    jellyfish_image = pygame.image.load('assets/Enemys/jellyfish.png')
+    jellyfish_1 = Traps(1318,256,jellyfish_image,25)
+    jellyfish_2 = Traps(1378, 256, jellyfish_image, 25)
+    jellyfish_3 = Traps(1426, 256, jellyfish_image, 25)
+    jellyfish_4 = Traps(1488, 256, jellyfish_image, 25)
+    jellyfish_5 = Traps(1536, 256, jellyfish_image, 25)
+    jellyfish_6 = Traps(1598, 256, jellyfish_image, 25)
+    jellyfish_7 = Traps(1670, 256, jellyfish_image, 25)
+    jellyfishs = [jellyfish_1,jellyfish_2,jellyfish_3,jellyfish_4,jellyfish_5,jellyfish_6,jellyfish_7]
+
     #=========================
     # Maps
     #========================
-    map_1 = Map(1900, 1200, background_1,"map_1",[],[pickable_potion,pickable_key],[],[],[pearl_1,pearl_2,pearl_3,pearl_9])
-    map_2 = Map(1900, 1200, background_2,"map_2",[octopus_1,octopus_2,octopus_3,octopus_4],[],[door_1],[],[pearl_4,pearl_5,pearl_10,pearl_11,pearl_15])
-    map_3 = Map(1900, 1200, background_3,"map_3",[scary_fish_1,scary_fish_2,scary_fish_3],[],[pickable_key],[],[pearl_6,pearl_7,pearl_8,pearl_12,pearl_13,pearl_14,pearl_16,pearl_17])
+    map_1 = Map(1900, 1200, background_1,"map_1",[],[pickable_potion,pickable_key],[],[],[pearl_1,pearl_2,pearl_3,pearl_9],[])
+    map_2 = Map(1900, 1200, background_2,"map_2",[octopus_1,octopus_2,octopus_3,octopus_4],[],[door_1],[],[pearl_4,pearl_5,pearl_10,pearl_11,pearl_15],[])
+    map_3 = Map(1900, 1200, background_3,"map_3",[scary_fish_1,scary_fish_2,scary_fish_3],[],[pickable_key],[],[pearl_6,pearl_7,pearl_8,pearl_12,pearl_13,pearl_14,pearl_16,pearl_17],[jellyfish_1,jellyfish_2,jellyfish_3,jellyfish_4,jellyfish_5,jellyfish_6,jellyfish_7])
     map_4 = Map(1900, 1200, background_4,"map_4",[],[],[],[final_tresor])
     maps = [map_1, map_2,map_3,map_4]
     current_map = map_1
@@ -263,6 +276,9 @@ def game(screen, username):
 
             for pearls in current_map.pearls_objects:
                 points = pearls.points(player)
+
+            for traps in current_map.traps_objects:
+                damage = traps.hurt(player)
 
 
         result = player.draw(screen, camera,events)

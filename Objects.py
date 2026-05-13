@@ -65,5 +65,25 @@ class Pearls(GameObject):
                 self.active = False
                 player.score += self.score
 
+class Traps(GameObject):
+    def __init__(self, x, y, image,damage):
+        super().__init__(image, x, y)
+        self.damage = damage
+        self.attack_cooldown = 1000
+        self.last_attack_time = 0
+
+    def hurt(self,player):
+        if not self.rect.colliderect(player):
+            return
+        else:
+            current_time = pygame.time.get_ticks()
+
+            if current_time - self.last_attack_time >= self.attack_cooldown:
+                player.hp -= self.damage
+                player.hp = max(0, player.hp)
+                if player.hp <= 0:
+                    player.alive = False
+
+                self.last_attack_time = current_time
 
 
