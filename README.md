@@ -17,7 +17,16 @@ Un jeu style RPG en 2D de type action-exploration, dans lequel nous incarnons un
 
 ## Utilisation:
 
-Lancer le fichier "main.py"
+1. Executer le fichier MySQL qui se trouve dans documentation/DB/RPG2D.sql dans un client graphique pour base de données ex. HeidiSQL
+
+
+2. Aller dans le fichier backend/config/.env.exemple et choisissez une de ces deux options: 
+   1. copier les données, collez les dans un fichier .env créé au préalable puis insérer vos identifiants pour vous connecter à la base de données
+
+   2. ou alors insérer vos identifiants directement dans le fichier et renommer le fichier en .env
+   
+
+3. Lancer le fichier "main.py"
 
 ### Contrôles:
     Déplacer à gauche : ←
