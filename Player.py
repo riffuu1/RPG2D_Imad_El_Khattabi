@@ -11,13 +11,15 @@ from Damage_effect import DamageEffect
 from Items import *
 
 class Player:
-    def __init__(self, screen, player_folder,hp=100,damage=20):
+    def __init__(self, screen, player_folder,username,hp=100,damage=20):
         self.screen = screen
         self.start_x = 200
         self.start_y = 350
+        self.username = username
         self.hp = hp
         self.max_hp = self.hp
         self.score = 0
+        self.score_saved = False
         self.time = pygame.time.get_ticks()
         self.count = 999
         self.victory_score_added = False
@@ -293,6 +295,7 @@ class Player:
         self.win = False
         self.count = 999
         self.timer_running = True
+        self.score_saved = False
 
 
 
@@ -301,6 +304,10 @@ class Player:
     #================
     def draw(self, surface, camera,events):
         if not self.alive:
+            if not self.score_saved:
+                from backend.config.db import save_score
+                save_score(self.username, self.score)
+                self.score_saved = True
             self.timer_running = False
             overlay = pygame.Surface(surface.get_size())
             overlay.set_alpha(180)

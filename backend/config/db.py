@@ -63,7 +63,7 @@ def login_user(username, password):
     cursor = conn.cursor()
 
     try:
-        # chercher user
+        # --- search user ---
         query = "SELECT password FROM players WHERE username = %s"
         cursor.execute(query, (username,))
 
@@ -74,7 +74,7 @@ def login_user(username, password):
 
         stored_password = player[0]
 
-        # vérifier hash bcrypt
+        # --- check password hashed-
         if bcrypt.checkpw(
             password.encode(),
             stored_password.encode()
@@ -82,6 +82,47 @@ def login_user(username, password):
             return True, "Connexion réussie"
         else:
             return False, "Utilisateur ou mot de passe incorrect"
+
+    finally:
+        cursor.close()
+        conn.close()
+
+def save_score(username, score):
+    conn = pool.get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            "SELECT idPlayers FROM Players WHERE username = %s",
+            (username,)
+        )
+        result = cursor.fetchone()
+
+        if not result:
+            return False
+
+        player_id = result[0]
+
+        cursor.execute(
+            "SELECT score FROM Scores WHERE Players_idPlayers = %s",
+            (player_id,)
+        )
+        existing = cursor.fetchone()
+
+        if existing is None:
+            cursor.execute(
+                "INSERT INTO Scores (score, Players_idPlayers) VALUES (%s, %s)",
+                (score, player_id)
+            )
+        else:
+            if score > existing[0]:
+                cursor.execute(
+                    "UPDATE Scores SET score = %s WHERE Players_idPlayers = %s",
+                    (score, player_id)
+                )
+
+        conn.commit()
+        return True
 
     finally:
         cursor.close()

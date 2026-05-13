@@ -15,6 +15,7 @@ from inventory_menu import inventory_menu
 from Items import *
 from sign_in import register_screen
 from log_in import login_screen
+from backend.config.db import save_score
 
 
 pygame.init()
@@ -23,7 +24,7 @@ screen = pygame.display.set_mode((800, 700))
 pygame.display.set_caption("Chroniques du Kraken oublié")
 
 
-def game(screen):
+def game(screen, username):
 
     #================
     # Window
@@ -61,7 +62,7 @@ def game(screen):
     # Player
     #==================
     folder_player = "./assets/Player"
-    player = Player(screen, folder_player)
+    player = Player(screen, folder_player,username)
     player.damage_image = damage_image
 
     #==================
@@ -131,6 +132,8 @@ def game(screen):
     def end_screen(screen, player):
         clock = pygame.time.Clock()
         waiting = True
+        score_saved = False
+
 
         while waiting:
             screen.fill((0, 0, 0))
@@ -138,7 +141,12 @@ def game(screen):
             font = pygame.font.Font(None, 80)
 
             if player.win:
+
                 text = font.render("VICTORY !!!", True, (0, 255, 0))
+                if not score_saved:
+                    player.score += player.count
+                    save_score(player.username, player.score)
+                    score_saved = True
             else:
                 text = font.render("GAME OVER", True, (255, 0, 0))
 
@@ -257,20 +265,22 @@ def game(screen):
     return  "quit"
 
 state = "register"
+username = None
 
 while True:
 
     if state == "register":
-        state = register_screen(screen)
+        result = register_screen(screen)
+        if result:
+            state, username = result if isinstance(result, tuple) else (result, None)
 
     elif state == "login":
-        state = login_screen(screen)
+        result = login_screen(screen)
+        if result:
+            state, username = result
 
     elif state == "game":
-        state = game(screen)
-        break
-
-    elif state == "quit" or state is False:
+        state = game(screen, username)
         break
 
 pygame.quit()
