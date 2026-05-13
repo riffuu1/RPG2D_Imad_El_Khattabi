@@ -300,7 +300,7 @@ class Player:
 
 
     #================
-    # Affichage
+    # Display
     #================
     def draw(self, surface, camera,events):
         if not self.alive:

@@ -68,9 +68,9 @@ def charging(player, maps):
         with open(get_save_file(player), "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        # -------------------
+        #====================
         # Player
-        # -------------------
+        #====================
         player.rect.x = data["player"]["x"]
         player.rect.y = data["player"]["y"]
         player.hp = data["player"]["hp"]
@@ -110,9 +110,9 @@ def charging(player, maps):
                     )
                 )
 
-        # -------------------
+        #=====================
         # Current Map
-        # -------------------
+        #====================
         map_name = data["current_map"]
 
         current_map = next(
@@ -120,9 +120,9 @@ def charging(player, maps):
             maps[0]
         )
 
-        # -------------------
+        #===================
         # Objects
-        # -------------------
+        #===================
         saved_maps = {
             m["bg_name"]: m
             for m in data["maps"]

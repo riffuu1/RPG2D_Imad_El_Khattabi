@@ -31,7 +31,7 @@ def inventory_menu(screen, font, player: Player):
                 if event.key == pygame.K_e and player.inventory:
                     item = player.inventory[selected_index]
 
-                    # Use according to type
+                    # --- Use according to type ---
                     if isinstance(item, Potion):
                         item.use(player)        # recover HP
                         player.inventory.pop(selected_index)  # potion consumed
@@ -39,12 +39,12 @@ def inventory_menu(screen, font, player: Player):
                     elif isinstance(item, Key):
                         print(f"{item.name} is just in the inventory")  # no removal
 
-        # Semi-transparent background
+        # --- Semi-transparent background ---
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 180))
         screen.blit(overlay, (0, 0))
 
-        # Inventory display
+        # --- Inventory display ---
         y = 150
         if not player.inventory:
             text = font.render("Inventory empty", True, (255, 255, 255))

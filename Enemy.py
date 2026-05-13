@@ -48,7 +48,7 @@ class Enemy:
     #===============
     def move(self, player,collision_surface):
         if not self.active:
-            return  # Do nothing if the enemy is dead
+            return  # --- Do nothing if the enemy is dead ---
 
         dx = player.rect.centerx - self.rect.centerx
         dy = player.rect.centery - self.rect.centery
