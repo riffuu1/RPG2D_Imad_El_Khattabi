@@ -16,6 +16,7 @@ from Items import *
 from sign_in import register_screen
 from log_in import login_screen
 from backend.config.db import save_score
+from saves import *
 
 
 pygame.init()
@@ -86,12 +87,12 @@ def game(screen, username):
     potion_image = pygame.image.load('assets/Items/heal potion.png')
     potion_image = pygame.transform.scale(potion_image, (50, 50))
     potion_item = Potion("Potion", potion_image)
-    pickable_potion =PickableObject(200,350,potion_image,potion_item)
+    pickable_potion =PickableObject(200,350,potion_image,potion_item,"potion_1")
 
     skull_key_image = pygame.image.load('assets/Items/Skull_key.png.')
     skull_key_image = pygame.transform.scale(skull_key_image, (50, 50))
     skull_item = Key("skull_key","skull_key",skull_key_image)
-    pickable_key = PickableObject(1736, 462,skull_key_image,skull_item)
+    pickable_key = PickableObject(1736, 462,skull_key_image,skull_item,"skull_key")
 
 
     #==========================
@@ -100,7 +101,7 @@ def game(screen, username):
     door_image = pygame.image.load('assets/Door/door_map_2.png')
     door_image = pygame.transform.scale(door_image, (1402, 36))
     door_id = "skull_key"
-    door_1 = Door(210,996,door_image,door_id)
+    door_1 = Door(210,996,door_image,door_id,"door_1")
     doors = [door_1]
 
     #=================
@@ -108,7 +109,7 @@ def game(screen, username):
     #=================
     tresor_image = pygame.image.load('assets/Tresor/Last tresor.png')
     tresor_image = pygame.transform.scale(tresor_image, (250, 250))
-    final_tresor = Tresor(870,78, tresor_image)
+    final_tresor = Tresor(870,78, tresor_image,"tresor_1")
     tresors=[final_tresor]
 
     #=========================
@@ -120,36 +121,36 @@ def game(screen, username):
     pearl_2_image = pygame.transform.scale(pearl_2_image, (50, 50))
     pearl_3_image = pygame.image.load('assets/Pearles/pearles_3.png')
     pearl_3_image = pygame.transform.scale(pearl_3_image, (50, 50))
-    pearl_1 = Pearls (36,556,pearl_1_image,25)
-    pearl_2 = Pearls(592,888, pearl_1_image,25)
-    pearl_3 = Pearls(1442,272, pearl_1_image,25)
-    pearl_4 = Pearls(956,338, pearl_1_image,25)
-    pearl_5 = Pearls(790,1044, pearl_1_image,25)
-    pearl_6 = Pearls(610,780, pearl_1_image,25)
-    pearl_7 = Pearls(1424,346, pearl_1_image,25)
-    pearl_8 = Pearls (1496,380,pearl_1_image,25)
-    pearl_9 = Pearls(1048,658, pearl_2_image,50)
-    pearl_10 = Pearls(446,814, pearl_2_image,50)
-    pearl_11 = Pearls(1590,682, pearl_2_image,50)
-    pearl_12 = Pearls(552, 416, pearl_2_image,50)
-    pearl_13 = Pearls(818,932, pearl_2_image,50)
-    pearl_14 = Pearls(1286,394, pearl_2_image,50)
-    pearl_15 = Pearls(94,24, pearl_3_image,75)
-    pearl_16 = Pearls(128,788, pearl_3_image,75)
-    pearl_17 = Pearls(1414,490, pearl_3_image,75)
+    pearl_1 = Pearls (36,556,pearl_1_image,25,"pearles_1")
+    pearl_2 = Pearls(592,888, pearl_1_image,25,"pearles_2")
+    pearl_3 = Pearls(1442,272, pearl_1_image,25,"pearles_3")
+    pearl_4 = Pearls(956,338, pearl_1_image,25,"pearles_4")
+    pearl_5 = Pearls(790,1044, pearl_1_image,25,"pearles_5")
+    pearl_6 = Pearls(610,780, pearl_1_image,25,"pearles_6")
+    pearl_7 = Pearls(1424,346, pearl_1_image,25,"pearles_7")
+    pearl_8 = Pearls (1496,380,pearl_1_image,25,"pearles_8")
+    pearl_9 = Pearls(1048,658, pearl_2_image,50,"pearles_9")
+    pearl_10 = Pearls(446,814, pearl_2_image,50,"pearles_10")
+    pearl_11 = Pearls(1590,682, pearl_2_image,50,"pearles_11")
+    pearl_12 = Pearls(552, 416, pearl_2_image,50,"pearles_12")
+    pearl_13 = Pearls(818,932, pearl_2_image,50,"pearles_13")
+    pearl_14 = Pearls(1286,394, pearl_2_image,50,"pearles_14")
+    pearl_15 = Pearls(94,24, pearl_3_image,75,"pearles_15")
+    pearl_16 = Pearls(128,788, pearl_3_image,75,"pearles_16")
+    pearl_17 = Pearls(1414,490, pearl_3_image,75,"pearles_17")
     pearls= [pearl_1,pearl_2,pearl_3,pearl_4,pearl_5,pearl_6,pearl_7,pearl_8,pearl_9,pearl_10,pearl_11,pearl_12,pearl_13,pearl_14,pearl_15,pearl_16,pearl_17]
 
     #===========================
     # Traps
     #==========================
     jellyfish_image = pygame.image.load('assets/Enemys/jellyfish.png')
-    jellyfish_1 = Traps(1318,256,jellyfish_image,25)
-    jellyfish_2 = Traps(1378, 256, jellyfish_image, 25)
-    jellyfish_3 = Traps(1426, 256, jellyfish_image, 25)
-    jellyfish_4 = Traps(1488, 256, jellyfish_image, 25)
-    jellyfish_5 = Traps(1536, 256, jellyfish_image, 25)
-    jellyfish_6 = Traps(1598, 256, jellyfish_image, 25)
-    jellyfish_7 = Traps(1670, 256, jellyfish_image, 25)
+    jellyfish_1 = Traps(1318,256,jellyfish_image,25,"jellyfish_1")
+    jellyfish_2 = Traps(1378, 256, jellyfish_image, 25,"jellyfish_2")
+    jellyfish_3 = Traps(1426, 256, jellyfish_image, 25,"jellyfish_3")
+    jellyfish_4 = Traps(1488, 256, jellyfish_image, 25,"jellyfish_4")
+    jellyfish_5 = Traps(1536, 256, jellyfish_image, 25,"jellyfish_5")
+    jellyfish_6 = Traps(1598, 256, jellyfish_image, 25,"jellyfish_6")
+    jellyfish_7 = Traps(1670, 256, jellyfish_image, 25,"jellyfish_7")
     jellyfishs = [jellyfish_1,jellyfish_2,jellyfish_3,jellyfish_4,jellyfish_5,jellyfish_6,jellyfish_7]
 
     #=========================
@@ -233,12 +234,18 @@ def game(screen, username):
 
         for event in events:
             if event.type == pygame.QUIT:
+                saving(player,maps,current_map)
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
                     e_pressed = True
                 if event.key == pygame.K_i:
                     inventory_menu(screen,pygame.font.Font(None, 36), player)
+                if event.key == pygame.K_F5:
+                    saving(player, maps, current_map)
+
+                if event.key == pygame.K_F9:
+                    current_map = charging(player, maps)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_e:
                     e_pressed = False
@@ -247,8 +254,10 @@ def game(screen, username):
         current_map.draw(screen, camera)
         if player.alive:
             player.update(keys,current_map.width, current_map.height, current_map.get_surface(),current_map.enemies,current_map.door_objects)
-
+            old_map = current_map
             current_map = Map.switch_map(current_map, player, map_1, map_2,map_3,map_4)
+            if old_map != current_map:
+                saving(player, maps, current_map)
             camera.update(player, Width, Height, current_map.width, current_map.height)
             player.countdown()
             player.show_time(screen)
