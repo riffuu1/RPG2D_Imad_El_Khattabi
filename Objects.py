@@ -80,6 +80,7 @@ class Traps(GameObject):
 
             if current_time - self.last_attack_time >= self.attack_cooldown:
                 player.hp -= self.damage
+                player.score += self.damage
                 player.hp = max(0, player.hp)
                 if player.hp <= 0:
                     player.alive = False
