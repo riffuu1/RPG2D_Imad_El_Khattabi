@@ -1,6 +1,6 @@
 # Author : El Khattabi Imad
-# Date: 27.04.2026
-# Version : 1.2
+# Date: 04.05.2026
+# Version : 2.0
 
 
 
@@ -8,14 +8,24 @@ import pygame
 from Collision_color import *
 from Enemy import Enemy
 from Damage_effect import DamageEffect
+from Items import *
 
 class Player:
-    def __init__(self, screen, player_folder,hp=100,damage=20):
+    def __init__(self, screen, player_folder,username,hp=100,damage=20):
         self.screen = screen
         self.start_x = 200
         self.start_y = 350
+        self.username = username
         self.hp = hp
         self.max_hp = self.hp
+        self.score = 0
+        self.score_saved = False
+        self.time = pygame.time.get_ticks()
+        self.count = 999
+        self.victory_score_added = False
+        self.timer_running = True
+        self.win = False
+        self.inventory = []
         self.damage = damage
         self.attack_cooldown = 300 # ms
         self.last_attack_time = 0
@@ -87,7 +97,7 @@ class Player:
     #=====================
     # Moves
     #====================
-    def update(self, keys,map_width, map_height,surface,enemies):
+    def update(self, keys,map_width, map_height,surface,enemies,doors):
         if not self.alive:
             return
         old_x, old_y = self.rect.x, self.rect.y
@@ -130,6 +140,8 @@ class Player:
             self.last_direction = "right"
             in_movement = True
 
+        print(self.rect.x, self.rect.y)
+
         self.hitbox.x = self.rect.x + 40
 
         # --- Horizontal Collision ---
@@ -154,9 +166,17 @@ class Player:
                 self.rect.y = old_y
                 self.hitbox.y = old_y + 70
 
+        for door in doors:
+            if door.active and self.hitbox.colliderect(door.rect):
+                self.rect.x = old_x
+                self.rect.y = old_y
+                self.hitbox.x = old_x + 40
+                self.hitbox.y = old_y + 70
+
         # --- Attack ---
         if keys[pygame.K_x]:
             self.attack(enemies)
+
 
     #================
     # HP
@@ -170,6 +190,38 @@ class Player:
         hp_width = int((self.hp / self.max_hp) * bar_width)
         pygame.draw.rect(self.screen, (0, 255, 0), (bar_x, bar_y, hp_width, bar_height))
         self.screen.blit(hp_text, (bar_x, bar_y))
+
+    #================
+    # Score
+    #================
+    def show_score(self):
+        font = pygame.font.Font(None, 36)
+        score_text = font.render(f"Score: {self.score}", True, (255, 255, 255))
+        self.screen.blit(score_text, (20, 50))
+
+    #===============
+    # Time
+    #===============
+    def countdown(self):
+
+        if not self.timer_running:
+            return
+
+        now = pygame.time.get_ticks()
+
+        if now - self.time >= 1000:
+            self.count -= 1
+            self.time = now
+
+            if self.count <= 0:
+                self.count = 0
+                self.timer_running = False
+
+    def show_time(self, screen):
+        font = pygame.font.Font(None, 36)
+        text = font.render(f"Time : {self.count}", True, (255, 255, 255))
+        screen.blit(text, (650, 20))
+
 
     #=================
     # Attack
@@ -199,6 +251,7 @@ class Player:
                 print(f"{enemy.name} takes {self.damage} damage")
                 if enemy.hp <= 0:
                     enemy.active = False
+                    self.score += 100
 
         # --- Visual Effect ---
         rotated_image = pygame.transform.rotate(self.damage_image, angle)
@@ -207,20 +260,100 @@ class Player:
                               rotated_image)
         self.effects.append(effect)
 
-    def draw(self, surface, camera):
+    #=================
+    # Inventory
+    #=================
+
+    def add_item(self, item: Item):
+        if item not in self.inventory:
+            self.inventory.append(item)
+            print(f"{item.name} added to inventory")
+
+    def remove_item(self, item: Item):
+        if item in self.inventory:
+            self.inventory.remove(item)
+            print(f"{item.name} removed from inventory")
+
+    def use_item(self, item: Item):
+        item.use(self)
+        if isinstance(item, Potion):
+            self.remove_item(item)
+
+    #====================
+    # RESET
+    #===================
+    def reset(self):
+        self.hp = self.max_hp
+        self.alive = True
+        self.rect.x = self.start_x
+        self.rect.y = self.start_y
+        self.hitbox.x = self.rect.x + 40
+        self.hitbox.y = self.rect.y + 70
+        self.score = 0
+        self.inventory.clear()
+        self.victory_score_added = False
+        self.win = False
+        self.count = 999
+        self.timer_running = True
+        self.score_saved = False
+
+
+
+    #================
+    # Display
+    #================
+    def draw(self, surface, camera,events):
         if not self.alive:
+            if not self.score_saved:
+                from backend.config.db import save_score
+                save_score(self.username, self.score)
+                self.score_saved = True
+            self.timer_running = False
             overlay = pygame.Surface(surface.get_size())
             overlay.set_alpha(180)
             overlay.fill((0, 0, 0))
             surface.blit(overlay, (0, 0))
 
             font = pygame.font.Font(None, 80)
-            text = font.render("GAME OVER", True, (255, 0, 0))
+            text1 = font.render("GAME OVER", True, (255, 0, 0))
+            text2 = font.render(f"Score final : {self.score}", True, (255, 255, 255))
 
-            text_rect = text.get_rect(center=(surface.get_width() // 2,
-                                              surface.get_height() // 2))
-            surface.blit(text, text_rect)
-            return
+            text_rect_1 = text1.get_rect(center=(surface.get_width() // 2,
+                                                 surface.get_height() // 2 - 40))
+            text_rect_2 = text2.get_rect(center=(surface.get_width() // 2,
+                                                 surface.get_height() // 2 + 40))
+            surface.blit(text1, text_rect_1)
+            surface.blit(text2, text_rect_2)
+
+            button_font = pygame.font.Font(None, 50)
+            button_text = button_font.render("RESTART", True, (0, 0, 0))
+
+            button_rect = pygame.Rect(0, 0, 200, 60)
+            button_rect.center = (surface.get_width() // 2, surface.get_height() // 2 + 120)
+
+            # Dessin bouton
+            pygame.draw.rect(surface, (255, 255, 255), button_rect, border_radius=10)
+            surface.blit(button_text, button_text.get_rect(center=button_rect.center))
+
+            button_font_2 = pygame.font.Font(None, 50)
+            button_text_2 = button_font_2.render("QUIT", True, (0, 0, 0))
+
+            button_rect_2 = pygame.Rect(0, 0, 220, 60)
+            button_rect_2.center = (surface.get_width() // 2, surface.get_height() // 2 + 260)
+
+            pygame.draw.rect(surface, (255, 255, 255), button_rect_2, border_radius=10)
+            surface.blit(button_text_2, button_text_2.get_rect(center=button_rect_2.center))
+
+            for event in events:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if button_rect.collidepoint(event.pos):
+                            return "restart"
+                        if button_rect_2.collidepoint(event.pos):
+                            return "quit"
+
+            return "game_over"
+
 
         # --- Player animation ---
         surface.blit(self.get_frame(),

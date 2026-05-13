@@ -4,7 +4,7 @@
 
 import pygame
 
-obstacle_colors = [(0, 0, 0),(255,255,255)]
+obstacle_colors = [(0, 0, 0),(255,255,255),(255,216,0),(251,235,0)]
 
 def check_collision_with_color(surface, x, y):
     # --- Checks if a pixel on the surface matches a collision color.Returns True if a collision is detected. ---

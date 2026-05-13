@@ -1,3 +1,8 @@
+# Author : El Khattabi Imad
+# Date: 29.04.2026
+# Version : 1.0
+
+
 import pygame
 
 class DamageEffect:

@@ -1,0 +1,8 @@
+# --- .env ---
+backend/config/.env
+
+# python cache ---
+__pychache__/
+
+# IDE files
+.idea/
