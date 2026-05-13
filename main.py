@@ -6,7 +6,7 @@
 import pygame
 from pygame.display import get_surface
 
-from Objects import PickableObject, Door, Tresor
+from Objects import *
 from Player import Player
 from Camera import Camera
 from Enemy import Enemy
@@ -112,11 +112,39 @@ def game(screen, username):
     tresors=[final_tresor]
 
     #=========================
+    # Pearls
+    #=========================
+    pearl_1_image = pygame.image.load('assets/Pearles/pearles_1.png')
+    pearl_1_image = pygame.transform.scale(pearl_1_image, (50, 50))
+    pearl_2_image = pygame.image.load('assets/Pearles/pearles_2.png')
+    pearl_2_image = pygame.transform.scale(pearl_2_image, (50, 50))
+    pearl_3_image = pygame.image.load('assets/Pearles/pearles_3.png')
+    pearl_3_image = pygame.transform.scale(pearl_3_image, (50, 50))
+    pearl_1 = Pearls (36,556,pearl_1_image,25)
+    pearl_2 = Pearls(592,888, pearl_1_image,25)
+    pearl_3 = Pearls(1442,272, pearl_1_image,25)
+    pearl_4 = Pearls(956,338, pearl_1_image,25)
+    pearl_5 = Pearls(790,1044, pearl_1_image,25)
+    pearl_6 = Pearls(610,780, pearl_1_image,25)
+    pearl_7 = Pearls(1424,346, pearl_1_image,25)
+    pearl_8 = Pearls (1496,380,pearl_1_image,25)
+    pearl_9 = Pearls(1048,658, pearl_2_image,50)
+    pearl_10 = Pearls(446,814, pearl_2_image,50)
+    pearl_11 = Pearls(1590,682, pearl_2_image,50)
+    pearl_12 = Pearls(552, 416, pearl_2_image,50)
+    pearl_13 = Pearls(818,932, pearl_2_image,50)
+    pearl_14 = Pearls(1286,394, pearl_2_image,50)
+    pearl_15 = Pearls(94,24, pearl_3_image,75)
+    pearl_16 = Pearls(128,788, pearl_3_image,75)
+    pearl_17 = Pearls(1414,490, pearl_3_image,75)
+    pearls= [pearl_1,pearl_2,pearl_3,pearl_4,pearl_5,pearl_6,pearl_7,pearl_8,pearl_9,pearl_10,pearl_11,pearl_12,pearl_13,pearl_14,pearl_15,pearl_16,pearl_17]
+
+    #=========================
     # Maps
     #========================
-    map_1 = Map(1900, 1200, background_1,"map_1",[],[pickable_potion,pickable_key],[],[])
-    map_2 = Map(1900, 1200, background_2,"map_2",[octopus_1,octopus_2,octopus_3,octopus_4],[],[door_1],[])
-    map_3 = Map(1900, 1200, background_3,"map_3",[scary_fish_1,scary_fish_2,scary_fish_3],[],[pickable_key],[])
+    map_1 = Map(1900, 1200, background_1,"map_1",[],[pickable_potion,pickable_key],[],[],[pearl_1,pearl_2,pearl_3,pearl_9])
+    map_2 = Map(1900, 1200, background_2,"map_2",[octopus_1,octopus_2,octopus_3,octopus_4],[],[door_1],[],[pearl_4,pearl_5,pearl_10,pearl_11,pearl_15])
+    map_3 = Map(1900, 1200, background_3,"map_3",[scary_fish_1,scary_fish_2,scary_fish_3],[],[pickable_key],[],[pearl_6,pearl_7,pearl_8,pearl_12,pearl_13,pearl_14,pearl_16,pearl_17])
     map_4 = Map(1900, 1200, background_4,"map_4",[],[],[],[final_tresor])
     maps = [map_1, map_2,map_3,map_4]
     current_map = map_1
@@ -232,6 +260,10 @@ def game(screen, username):
                     player.win = True
                     player.alive = False
                     return end_screen(screen, player)
+
+            for pearls in current_map.pearls_objects:
+                points = pearls.points(player)
+
 
         result = player.draw(screen, camera,events)
         if result == "restart":

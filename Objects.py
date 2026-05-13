@@ -51,4 +51,19 @@ class Tresor(GameObject):
             self.finished = True
             return "win"
 
+class Pearls(GameObject):
+    def __init__(self, x, y, image,score):
+        super().__init__(image, x, y)
+        self.score = score
+        self.active = True
+
+    def points(self,player):
+        if self.active == False:
+            return
+        else:
+            if self.rect.colliderect(player.hitbox):
+                self.active = False
+                player.score += self.score
+
+
 

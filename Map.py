@@ -6,7 +6,7 @@
 import pygame
 
 class Map:
-    def __init__(self, width, height, bg_image, bg_name, enemies=None, pickable_objects=None,door_objects=None, treasure_objects=None):
+    def __init__(self, width, height, bg_image, bg_name, enemies=None, pickable_objects=None,door_objects=None, treasure_objects=None, pearls_objects=None):
         self.width = width
         self.height = height
         self.bg_image = bg_image
@@ -15,6 +15,7 @@ class Map:
         self.pickable_objects = pickable_objects if pickable_objects else []
         self.door_objects = door_objects if door_objects else []
         self.treasure_objects = treasure_objects if treasure_objects else []
+        self.pearls_objects = pearls_objects if pearls_objects else []
 
 
     @staticmethod
@@ -71,4 +72,8 @@ class Map:
 
         # --- tresor objects ---
         for obj in self.treasure_objects:
+            obj.draw(screen, camera)
+
+        # --- pearl objects ---
+        for obj in self.pearls_objects:
             obj.draw(screen, camera)
