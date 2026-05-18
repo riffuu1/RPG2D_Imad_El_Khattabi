@@ -1,11 +1,11 @@
 {
     "player": {
-        "id": "riffuu",
-        "x": 200,
-        "y": 350,
-        "hp": 100,
-        "score": 0,
-        "time_left": 998,
+        "id": "test2",
+        "x": 1422,
+        "y": 918,
+        "hp": 10,
+        "score": 410,
+        "time_left": 847,
         "inventory": []
     },
     "maps": [
@@ -23,7 +23,7 @@
                 },
                 {
                     "obj_id": "skull_key",
-                    "active": true,
+                    "active": false,
                     "x": 1736,
                     "y": 462,
                     "door": null,
@@ -32,7 +32,7 @@
                 },
                 {
                     "obj_id": "pearles_1",
-                    "active": true,
+                    "active": false,
                     "x": 36,
                     "y": 556,
                     "door": null,
@@ -41,7 +41,7 @@
                 },
                 {
                     "obj_id": "pearles_2",
-                    "active": true,
+                    "active": false,
                     "x": 592,
                     "y": 888,
                     "door": null,
@@ -59,7 +59,7 @@
                 },
                 {
                     "obj_id": "pearles_9",
-                    "active": true,
+                    "active": false,
                     "x": 1048,
                     "y": 658,
                     "door": null,
@@ -73,7 +73,7 @@
             "objects": [
                 {
                     "obj_id": "door_1",
-                    "active": true,
+                    "active": false,
                     "x": 210,
                     "y": 996,
                     "door": "skull_key",
@@ -91,7 +91,7 @@
                 },
                 {
                     "obj_id": "pearles_5",
-                    "active": true,
+                    "active": false,
                     "x": 790,
                     "y": 1044,
                     "door": null,
@@ -109,7 +109,7 @@
                 },
                 {
                     "obj_id": "pearles_11",
-                    "active": true,
+                    "active": false,
                     "x": 1590,
                     "y": 682,
                     "door": null,
@@ -132,7 +132,7 @@
             "objects": [
                 {
                     "obj_id": "skull_key",
-                    "active": true,
+                    "active": false,
                     "x": 1736,
                     "y": 462,
                     "door": null,
@@ -141,7 +141,7 @@
                 },
                 {
                     "obj_id": "pearles_6",
-                    "active": true,
+                    "active": false,
                     "x": 610,
                     "y": 780,
                     "door": null,
@@ -177,7 +177,7 @@
                 },
                 {
                     "obj_id": "pearles_13",
-                    "active": true,
+                    "active": false,
                     "x": 818,
                     "y": 932,
                     "door": null,
@@ -291,5 +291,5 @@
             ]
         }
     ],
-    "current_map": "map_1"
+    "current_map": "map_3"
 }

@@ -18,6 +18,7 @@ from log_in import login_screen
 from backend.config.db import save_score
 from saves import *
 from Main_menu import main_menu
+from ranking import ranking
 
 
 pygame.init()
@@ -345,5 +346,13 @@ while True:
         result = main_menu(screen, username)
         if result:
             state, username = result
+
+    elif state == "ranking":
+        result = ranking(screen, username)
+        if result:
+            state, username = result
+
+    elif state == "quit":
+        break
 
 pygame.quit()

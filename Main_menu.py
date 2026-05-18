@@ -45,9 +45,13 @@ def main_menu(screen, username):
         pygame.draw.rect(screen, (70, 130, 180), new_game_button)
         draw_text(screen, "New Game", font, (255, 255, 255), 340, 337)
 
-        quit_button = pygame.Rect(370, 420, 80, 60)
+        ranking_button = pygame.Rect(310, 420, 190, 60)
+        pygame.draw.rect(screen, (70, 130, 180), ranking_button)
+        draw_text(screen, "Ranking", font, (255, 255, 255), 340, 437)
+
+        quit_button = pygame.Rect(370, 520, 80, 60)
         pygame.draw.rect(screen, (70, 130, 180), quit_button)
-        draw_text(screen, "Quit", font, (255, 255, 255), 380, 437)
+        draw_text(screen, "Quit", font, (255, 255, 255), 380, 537)
 
         #===========================
         # EVENTS
@@ -62,6 +66,9 @@ def main_menu(screen, username):
 
                 if new_game_button.collidepoint(event.pos):
                     return "game", username
+
+                if ranking_button.collidepoint(event.pos):
+                    return "ranking", username
 
                 if quit_button.collidepoint(event.pos):
                     return "quit", username

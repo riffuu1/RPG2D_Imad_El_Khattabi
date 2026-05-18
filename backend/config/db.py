@@ -127,3 +127,37 @@ def save_score(username, score):
     finally:
         cursor.close()
         conn.close()
+
+#===================
+# Ranking
+#===================
+def get_top_scores():
+
+    conn = pool.get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT Players.username, Scores.score
+            FROM Scores
+            JOIN Players
+            ON Scores.Players_idPlayers = Players.idPlayers
+            ORDER BY Scores.score DESC
+            LIMIT 10
+        """)
+
+        results = cursor.fetchall()
+
+        scores = []
+
+        for row in results:
+            scores.append({
+                "username": row[0],
+                "score": row[1]
+            })
+
+        return scores
+
+    finally:
+        cursor.close()
+        conn.close()
