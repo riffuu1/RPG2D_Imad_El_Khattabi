@@ -1,5 +1,6 @@
 import pygame
 import pygame_menu
+from saves import existing_backbup
 
 from sign_in import WIDTH
 
@@ -35,7 +36,7 @@ def main_menu(screen, username):
     while running:
 
         screen.fill((20,20,30))
-
+        has_save = existing_backbup(username)
         #==========================
         # TITLE
         #==========================
@@ -45,13 +46,18 @@ def main_menu(screen, username):
         pygame.draw.rect(screen, (70, 130, 180), new_game_button)
         draw_text(screen, "New Game", font, (255, 255, 255), 340, 337)
 
-        ranking_button = pygame.Rect(310, 420, 190, 60)
-        pygame.draw.rect(screen, (70, 130, 180), ranking_button)
-        draw_text(screen, "Ranking", font, (255, 255, 255), 340, 437)
+        if has_save:
+            continue_button = pygame.Rect(310, 420, 190, 60)
+            pygame.draw.rect(screen, (70, 130, 180), continue_button)
+            draw_text(screen, "Continue", font, (255, 255, 255), 340, 437)
 
-        quit_button = pygame.Rect(370, 520, 80, 60)
+        ranking_button = pygame.Rect(310, 520, 190, 60)
+        pygame.draw.rect(screen, (70, 130, 180), ranking_button)
+        draw_text(screen, "Ranking", font, (255, 255, 255), 340, 537)
+
+        quit_button = pygame.Rect(370, 620, 80, 60)
         pygame.draw.rect(screen, (70, 130, 180), quit_button)
-        draw_text(screen, "Quit", font, (255, 255, 255), 380, 537)
+        draw_text(screen, "Quit", font, (255, 255, 255), 380, 637)
 
         #===========================
         # EVENTS
@@ -66,6 +72,9 @@ def main_menu(screen, username):
 
                 if new_game_button.collidepoint(event.pos):
                     return "game", username
+                if has_save:
+                    if continue_button.collidepoint(event.pos):
+                        return "continue", username
 
                 if ranking_button.collidepoint(event.pos):
                     return "ranking", username

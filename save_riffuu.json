@@ -1,11 +1,11 @@
 {
     "player": {
         "id": "riffuu",
-        "x": 248,
-        "y": 388,
+        "x": 1444,
+        "y": 26,
         "hp": 100,
-        "score": 25,
-        "time_left": 987,
+        "score": 100,
+        "time_left": 961,
         "inventory": [
             "Potion"
         ]
@@ -43,7 +43,7 @@
                 },
                 {
                     "obj_id": "pearles_2",
-                    "active": true,
+                    "active": false,
                     "x": 592,
                     "y": 888,
                     "door": null,
@@ -61,7 +61,7 @@
                 },
                 {
                     "obj_id": "pearles_9",
-                    "active": true,
+                    "active": false,
                     "x": 1048,
                     "y": 658,
                     "door": null,
@@ -293,5 +293,5 @@
             ]
         }
     ],
-    "current_map": "map_1"
+    "current_map": "map_2"
 }

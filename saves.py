@@ -4,8 +4,8 @@ import pygame
 from Items import *
 
 
-def get_save_file(player):
-    return f"save_{player.username}.json"
+def get_save_file(username):
+    return f"save_{username}.json"
 
 
 def saving(player, maps, current_map):
@@ -56,7 +56,7 @@ def saving(player, maps, current_map):
         "current_map": current_map.bg_name
     }
 
-    with open(get_save_file(player), "w", encoding="utf-8") as f:
+    with open(get_save_file(player.username), "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 
     print("Jeu sauvegardé !")
@@ -65,7 +65,7 @@ def saving(player, maps, current_map):
 def charging(player, maps):
 
     try:
-        with open(get_save_file(player), "r", encoding="utf-8") as f:
+        with open(get_save_file(player.username), "r", encoding="utf-8") as f:
             data = json.load(f)
 
         #====================
@@ -173,5 +173,5 @@ def charging(player, maps):
         return maps[0]
 
 
-def existing_backbup(player):
-    return os.path.exists(get_save_file(player))
+def existing_backbup(username):
+    return os.path.exists(get_save_file(username))

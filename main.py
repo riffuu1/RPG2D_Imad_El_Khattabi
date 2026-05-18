@@ -28,7 +28,7 @@ screen = pygame.display.set_mode((800, 700))
 pygame.display.set_caption("Chroniques du Kraken oublié")
 
 
-def game(screen, username):
+def game(screen, username, mode="new"):
 
     #================
     # Window
@@ -230,6 +230,10 @@ def game(screen, username):
     running = True
     e_pressed = False
 
+    if mode == "load":
+        current_map = charging(player, maps)
+    else:
+        current_map = map_1
 
     while running:
         keys = pygame.key.get_pressed()
@@ -341,8 +345,15 @@ while True:
         if result:
             state, username = result
 
+
     elif state == "game":
-        state = game(screen, username)
+
+        state = game(screen, username, mode="new")
+
+
+    elif state == "continue":
+
+        state = game(screen, username, mode="load")
 
 
     elif state == "menu":
