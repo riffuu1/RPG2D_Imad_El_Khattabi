@@ -19,6 +19,7 @@ from backend.config.db import save_score
 from saves import *
 from Main_menu import main_menu
 from ranking import ranking
+from pause_menu import pause_menu
 
 
 pygame.init()
@@ -243,6 +244,8 @@ def game(screen, username):
                     e_pressed = True
                 if event.key == pygame.K_i:
                     inventory_menu(screen,pygame.font.Font(None, 36), player)
+                if event.key == pygame.K_ESCAPE:
+                    pause_menu(screen, pygame.font.Font(None, 40), pygame.font.Font(None, 80), player, current_map, maps)
                 if event.key == pygame.K_F5:
                     saving(player, maps, current_map)
 
