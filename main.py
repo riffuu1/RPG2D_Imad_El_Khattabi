@@ -17,6 +17,7 @@ from sign_in import register_screen
 from log_in import login_screen
 from backend.config.db import save_score
 from saves import *
+from Main_menu import main_menu
 
 
 pygame.init()
@@ -338,6 +339,11 @@ while True:
 
     elif state == "game":
         state = game(screen, username)
-        break
+
+
+    elif state == "menu":
+        result = main_menu(screen, username)
+        if result:
+            state, username = result
 
 pygame.quit()

@@ -95,7 +95,7 @@ def login_screen(screen):
                     if success:
                         popup.show("Connexion réussie")
                         pygame.time.delay(300)
-                        return "game",username
+                        return "menu",username
                     else:
                         popup.show(message)
 

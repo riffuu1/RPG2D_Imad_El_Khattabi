@@ -1,12 +1,14 @@
 {
     "player": {
-        "id": "riffuu",
-        "x": 868,
-        "y": 790,
+        "id": "test",
+        "x": 1100,
+        "y": 432,
         "hp": 100,
-        "score": 25,
-        "time_left": 990,
-        "inventory": []
+        "score": 75,
+        "time_left": 972,
+        "inventory": [
+            "skull_key"
+        ]
     },
     "maps": [
         {
@@ -23,7 +25,7 @@
                 },
                 {
                     "obj_id": "skull_key",
-                    "active": true,
+                    "active": false,
                     "x": 1736,
                     "y": 462,
                     "door": null,
@@ -59,7 +61,7 @@
                 },
                 {
                     "obj_id": "pearles_9",
-                    "active": true,
+                    "active": false,
                     "x": 1048,
                     "y": 658,
                     "door": null,
@@ -132,7 +134,7 @@
             "objects": [
                 {
                     "obj_id": "skull_key",
-                    "active": true,
+                    "active": false,
                     "x": 1736,
                     "y": 462,
                     "door": null,
@@ -291,5 +293,5 @@
             ]
         }
     ],
-    "current_map": "map_1"
+    "current_map": "map_2"
 }

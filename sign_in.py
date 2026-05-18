@@ -122,7 +122,7 @@ def register_screen(screen):
 
                     if success:
                         popup.show("Compte créé avec succès")
-                        return "game", username
+                        return "menu", username
                     else:
                         popup.show(message)
 
