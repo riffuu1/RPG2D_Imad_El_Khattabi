@@ -15,8 +15,7 @@ Un jeu style RPG en 2D de type action-exploration, dans lequel nous incarnons un
     Hashage du mot de passe : pip install bcrypt
     Liaison entre le .env et le fichier db.py : pip install python-dotenv
 
-## Utilisation:
-
+### Lancement du programme:
 1. Executer le fichier MySQL qui se trouve dans documentation/DB/RPG2D.sql dans un client graphique pour base de données ex. HeidiSQL
 
 
@@ -27,6 +26,9 @@ Un jeu style RPG en 2D de type action-exploration, dans lequel nous incarnons un
    
 
 3. Lancer le fichier "main.py"
+
+## Utilisation:
+
 
 ### Contrôles:
     Déplacer à gauche : ←
