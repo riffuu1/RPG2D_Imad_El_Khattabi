@@ -11,7 +11,7 @@ pool = pooling.MySQLConnectionPool(
     pool_size=5,
     host=os.getenv("DB_HOST"),
     user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASS"),
+    password=os.getenv("DB_PASSWORD"),
     database=os.getenv("DB_NAME"),
     port=os.getenv("DB_PORT")
 )
@@ -123,6 +123,40 @@ def save_score(username, score):
 
         conn.commit()
         return True
+
+    finally:
+        cursor.close()
+        conn.close()
+
+#===================
+# Ranking
+#===================
+def get_top_scores():
+
+    conn = pool.get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT Players.username, Scores.score
+            FROM Scores
+            JOIN Players
+            ON Scores.Players_idPlayers = Players.idPlayers
+            ORDER BY Scores.score DESC
+            LIMIT 10
+        """)
+
+        results = cursor.fetchall()
+
+        scores = []
+
+        for row in results:
+            scores.append({
+                "username": row[0],
+                "score": row[1]
+            })
+
+        return scores
 
     finally:
         cursor.close()

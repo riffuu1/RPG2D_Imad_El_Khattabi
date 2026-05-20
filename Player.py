@@ -14,7 +14,7 @@ class Player:
     def __init__(self, screen, player_folder,username,hp=100,damage=20):
         self.screen = screen
         self.start_x = 200
-        self.start_y = 350
+        self.start_y = 450
         self.username = username
         self.hp = hp
         self.max_hp = self.hp
